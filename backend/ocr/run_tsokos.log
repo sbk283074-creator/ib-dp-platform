@@ -1,0 +1,6 @@
+>>> sweep PH-TSOKOS-WB pages 171..704 dpi=90
+== PH-TSOKOS-WB (Tsokos Physics Workbook (7ed)) ==
+   sweep pages 171..704: 370 questions (chunks flushed)
+>>> sweep done for PH-TSOKOS-WB (may have stopped early), merging available chunks
+   merged 600 questions -> /Users/lucas.ma/Downloads/dp learning/ib-dp-platform/backend/ocr/book_json/PH-TSOKOS-WB.json
+DONE PH-TSOKOS-WB

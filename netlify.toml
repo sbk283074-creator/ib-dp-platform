@@ -1,0 +1,42 @@
+[build]
+  command = "npm run build"
+  publish = "frontend/dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  # Native modules must not be bundled. better-sqlite3 is never imported when
+  # TURSO_URL is set; @libsql/client is required at runtime (resolved from
+  # node_modules, which Netlify installs from this package.json).
+  [functions.external]
+  # Only better-sqlite3 stays external — it is NEVER imported in prod (Turso
+  # mode), so Netlify must not try to compile it. @libsql/client is bundled by
+  # esbuild; its native binary (@libsql/linux-x64-gnu) is pre-placed in
+  # netlify/functions/node_modules so the macOS local build can't skip it
+  # (Netlify's CLI bundles functions locally and would omit the Linux-only
+  # binary). The pre-placed copy ships in the function zip and resolves at
+  # runtime on Netlify's Linux runtime.
+  external_node_modules = ["better-sqlite3"]
+
+# API -> serverless function
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+# Figures -> Blob-backed function (same /figures/* path the frontend already uses)
+[[redirects]]
+  from = "/figures/*"
+  to = "/.netlify/functions/figure/:splat"
+  status = 200
+
+# SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  # `netlify dev` serves the built frontend + functions locally, including the
+  # /figures Blob function when authenticated.

@@ -1,0 +1,54 @@
+{
+  "questions": [
+    {
+      "id": "cs-1-1",
+      "subject": "CS",
+      "level": "HL",
+      "topic": "System fundamentals",
+      "subtopic": "System lifecycle",
+      "paper_type": "Paper 1",
+      "command_term": "Outline",
+      "marks": 4,
+      "difficulty": 2,
+      "question": "Outline the stages of the system lifecycle.",
+      "figure": "",
+      "answer": "Investigation, analysis, design, development, testing, implementation, maintenance.",
+      "explanation": "The system lifecycle breaks development into phases; each phase has deliverables that feed the next.",
+      "source": "original (IB-style)",
+      "tags": ["system lifecycle", "HL"]
+    },
+    {
+      "id": "math-1-1",
+      "subject": "Math",
+      "level": "HL",
+      "topic": "Calculus",
+      "subtopic": "Differentiation",
+      "paper_type": "Paper 1",
+      "command_term": "Calculate",
+      "marks": 6,
+      "difficulty": 3,
+      "question": "Find $\\frac{d}{dx}(x^3 \\sin x)$.",
+      "figure": "",
+      "answer": "$3x^2\\sin x + x^3\\cos x$",
+      "explanation": "Apply the product rule: $(uv)' = u'v + uv'$, with $u=x^3$, $v=\\sin x$.",
+      "source": "original (IB-style)",
+      "tags": ["differentiation", "product rule"]
+    },
+    {
+      "subject": "Physics",
+      "level": "HL",
+      "topic": "Mechanics",
+      "subtopic": "Kinematics",
+      "paper_type": "Paper 1",
+      "command_term": "Calculate",
+      "marks": 5,
+      "difficulty": 2,
+      "question": "A car accelerates uniformly from $0$ to $20\\,\\text{m s}^{-1}$ in $10\\,\\text{s}$. Calculate its acceleration.",
+      "figure": "",
+      "answer": "$a = \\frac{\\Delta v}{\\Delta t} = \\frac{20}{10} = 2\\,\\text{m s}^{-2}$",
+      "explanation": "Uniform acceleration is the change in velocity over time.",
+      "source": "original (IB-style)",
+      "tags": ["kinematics"]
+    }
+  ]
+}

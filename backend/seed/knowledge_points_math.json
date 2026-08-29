@@ -1,0 +1,14 @@
+{
+  "knowledge_points": [
+    { "id": "MATH-T1", "subject": "Math AA HL", "code": "T1", "theme": "Number and algebra", "title": "Sequences, series and induction", "description": "Arithmetic/geometric sequences, infinite series, mathematical induction.", "references": ["Math AA HL Guide Topic 1", "Haese AA HL Ch.1-2"] },
+    { "id": "MATH-T2", "subject": "Math AA HL", "code": "T2", "theme": "Functions", "title": "Functions", "description": "Domains, inverses, transformations, rational/exponential/logarithmic functions.", "references": ["Math AA HL Guide Topic 2", "Haese AA HL Ch.3-5"] },
+    { "id": "MATH-T3", "subject": "Math AA HL", "code": "T3", "theme": "Geometry and trigonometry", "title": "Vectors and geometry", "description": "Vectors, lines and planes, scalar/vector products, 3D geometry.", "references": ["Math AA HL Guide Topic 3", "Haese AA HL Ch.12"] },
+    { "id": "MATH-T4", "subject": "Math AA HL", "code": "T4", "theme": "Geometry and trigonometry", "title": "Vectors: further applications", "description": "Position vectors, minimum distances, perpendicularity, intersections.", "references": ["Math AA HL Guide Topic 3 (further)", "Haese AA HL Ch.13"] },
+    { "id": "MATH-T5", "subject": "Math AA HL", "code": "T5", "theme": "Statistics and probability", "title": "Statistics and probability", "description": "Probability, random variables, distributions, descriptive statistics.", "references": ["Math AA HL Guide Topic 4", "Haese AA HL Ch.14-16"] },
+    { "id": "MATH-T6", "subject": "Math AA HL", "code": "T6", "theme": "Calculus", "title": "Calculus", "description": "Limits, differentiation, integration, differential equations, series.", "references": ["Math AA HL Guide Topic 5", "Haese AA HL Ch.17-20"] },
+    { "id": "MATH-T7", "subject": "Math AA HL", "code": "T7", "theme": "Statistics and probability", "title": "Distributions and hypothesis testing", "description": "Normal/binomial distributions, confidence intervals, hypothesis tests.", "references": ["Math AA HL Guide Topic 4 (AHL)", "Haese AA HL Ch.16"] },
+    { "id": "MATH-T8", "subject": "Math AA HL", "code": "T8", "theme": "Number and algebra", "title": "Sets, relations and groups", "description": "Equivalence relations, binary operations, groups (legacy HL option content).", "references": ["Legacy Math HL Option: Sets/Relations/Groups"] },
+    { "id": "MATH-T9", "subject": "Math AA HL", "code": "T9", "theme": "Number and algebra", "title": "Complex numbers", "description": "Argand diagrams, polar form, De Moivre, roots of complex numbers.", "references": ["Math AA HL Guide Topic 1 (AHL)", "Haese AA HL Ch.7"] },
+    { "id": "MATH-T10", "subject": "Math AA HL", "code": "T10", "theme": "Number and algebra", "title": "Recurrence relations", "description": "Linear recurrence relations, characteristic equations, closed forms.", "references": ["Legacy Math HL content", "Haese AA HL Ch.1 (extension)"] }
+  ]
+}

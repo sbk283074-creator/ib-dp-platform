@@ -1,0 +1,35 @@
+# Local Netlify folder
+.netlify/
+
+# Dependencies and build output
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+frontend/dist/
+
+# Local databases, imports, and runtime files
+backend/*.db
+backend/*.db-*
+backend/data/
+backend/generated/
+backend/backend.log
+backend/*.log
+backend/**/backend.log
+backend/**/__pycache__/
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Generated local OCR / import artifacts
+backend/ocr/*.jsonl
+backend/ocr/*.json
+
+# Large local figure corpus; production figures belong in Netlify Blob storage
+backend/public/figures/
+backend/public/figures_orphaned/
+
+# OS/editor files
+.DS_Store
+

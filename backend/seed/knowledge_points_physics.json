@@ -1,0 +1,20 @@
+{
+  "knowledge_points": [
+    { "id": "PHY-T1", "subject": "Physics", "code": "T1", "theme": "Core", "title": "Measurements and uncertainties", "description": "SI units, uncertainties, precision, graphing.", "references": ["Physics Guide 2025", "Tsokos Ch.1"] },
+    { "id": "PHY-T2", "subject": "Physics", "code": "T2", "theme": "Core", "title": "Mechanics", "description": "Kinematics, forces, work/energy/power, momentum.", "references": ["Tsokos Ch.2"] },
+    { "id": "PHY-T3", "subject": "Physics", "code": "T3", "theme": "Core", "title": "Thermal physics", "description": "Temperature, heat, gas laws, thermodynamics.", "references": ["Tsokos Ch.3"] },
+    { "id": "PHY-T4", "subject": "Physics", "code": "T4", "theme": "Core", "title": "Waves", "description": "Oscillations, wave properties, superposition, Doppler.", "references": ["Tsokos Ch.4"] },
+    { "id": "PHY-T5", "subject": "Physics", "code": "T5", "theme": "Core", "title": "Electricity and magnetism", "description": "Circuits, fields, electromagnetic induction.", "references": ["Tsokos Ch.5"] },
+    { "id": "PHY-T6", "subject": "Physics", "code": "T6", "theme": "Core", "title": "Circular motion and gravitation", "description": "Circular motion, rotation, gravitation.", "references": ["Tsokos Ch.6"] },
+    { "id": "PHY-T7", "subject": "Physics", "code": "T7", "theme": "Core", "title": "Atomic, nuclear and particle physics", "description": "Atoms, nuclei, particles, radioactivity.", "references": ["Tsokos Ch.7"] },
+    { "id": "PHY-T8", "subject": "Physics", "code": "T8", "theme": "Core", "title": "Energy production", "description": "Energy sources, power, climate.", "references": ["Tsokos Ch.8"] },
+    { "id": "PHY-T9", "subject": "Physics", "code": "T9", "theme": "AHL", "title": "Wave phenomena (AHL)", "description": "Standing waves, diffraction, resolution, polarization.", "references": ["Tsokos Ch.9"] },
+    { "id": "PHY-T10", "subject": "Physics", "code": "T10", "theme": "AHL", "title": "Fields (AHL)", "description": "Gravitational, electric and magnetic fields in depth.", "references": ["Tsokos Ch.10"] },
+    { "id": "PHY-T11", "subject": "Physics", "code": "T11", "theme": "AHL", "title": "Electromagnetic induction (AHL)", "description": "Faraday, AC, transformers, capacitors.", "references": ["Tsokos Ch.11"] },
+    { "id": "PHY-T12", "subject": "Physics", "code": "T12", "theme": "AHL", "title": "Quantum and nuclear physics (AHL)", "description": "Quantum, nuclear, medical physics.", "references": ["Tsokos Ch.12"] },
+    { "id": "PHY-OPTA", "subject": "Physics", "code": "OPT-A", "theme": "Option", "title": "Option A — Relativity", "description": "Special relativity.", "references": ["Tsokos Option A"] },
+    { "id": "PHY-OPTB", "subject": "Physics", "code": "OPT-B", "theme": "Option", "title": "Option B — Engineering physics", "description": "Rigid bodies, thermodynamics, fluid dynamics.", "references": ["Tsokos Option B"] },
+    { "id": "PHY-OPTC", "subject": "Physics", "code": "OPT-C", "theme": "Option", "title": "Option C — Imaging", "description": "Lenses, optical instruments, medical imaging.", "references": ["Tsokos Option C"] },
+    { "id": "PHY-OPTD", "subject": "Physics", "code": "OPT-D", "theme": "Option", "title": "Option D — Astrophysics", "description": "Stars, cosmology, stellar evolution.", "references": ["Tsokos Option D"] }
+  ]
+}

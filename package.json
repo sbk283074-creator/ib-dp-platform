@@ -1,0 +1,19 @@
+{
+  "name": "ib-dp-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "upload-figures": "node scripts/upload-figures.mjs",
+    "deploy": "netlify deploy --prod"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.4",
+    "@libsql/linux-x64-gnu": "0.5.29",
+    "@netlify/blobs": "^8.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "serverless-http": "^3.2.0"
+  }
+}

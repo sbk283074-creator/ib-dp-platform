@@ -1,0 +1,21 @@
+/Users/lucas.ma/.workbuddy/binaries/python/envs/default/lib/python3.13/site-packages/torch/ao/nn/quantized/dynamic/modules/rnn.py:162: UserWarning: torch.quantize_per_tensor, torch.quantize_per_channel and other quantized tensor creation functions that produce tensors with dtype torch.quint8, torch.qint8, and torch.qint32 are deprecated and will be removed in a future PyTorch release. Please see https://github.com/pytorch/pytorch/issues/184982 for more information. (Triggered internally at /Users/runner/work/pytorch/pytorch/aten/src/ATen/quantized/Quantizer.cpp:116.)
+  w_ih = torch.quantize_per_tensor(
+[ocr] resume; 18 pages done
+/Users/lucas.ma/.workbuddy/binaries/python/envs/default/lib/python3.13/site-packages/torch/utils/data/dataloader.py:759: UserWarning: 'pin_memory' argument is set as true but not supported on MPS now, device pinned memory won't be used.
+  super().__init__(loader)
+[ocr] p10/158
+[ocr] p20/158
+[ocr] p30/158
+[ocr] p40/158
+[ocr] p50/158
+[ocr] p60/158
+[ocr] p70/158
+[ocr] p80/158
+[ocr] p90/158
+[ocr] p100/158
+[ocr] p110/158
+[ocr] p120/158
+[ocr] p130/158
+[ocr] p140/158
+[ocr] p150/158
+[ocr] DONE

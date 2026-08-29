@@ -1,0 +1,6 @@
+>>> sweep PH-CAMB-WB pages 41..415 dpi=90
+== PH-CAMB-WB (Cambridge Physics Workbook (7ed)) ==
+   sweep pages 41..415: 211 questions (chunks flushed)
+>>> sweep done for PH-CAMB-WB (may have stopped early), merging available chunks
+   merged 226 questions -> /Users/lucas.ma/Downloads/dp learning/ib-dp-platform/backend/ocr/book_json/PH-CAMB-WB.json
+DONE PH-CAMB-WB

@@ -1,0 +1,6 @@
+>>> sweep MA-HODDER-WB pages 11..227 dpi=90
+== MA-HODDER-WB (Math AA HL Exam Practice Workbook (Hodder 2021)) ==
+   sweep pages 11..227: 484 questions (chunks flushed)
+>>> sweep done for MA-HODDER-WB (may have stopped early), merging available chunks
+   merged 486 questions -> /Users/lucas.ma/Downloads/dp learning/ib-dp-platform/backend/ocr/book_json/MA-HODDER-WB.json
+DONE MA-HODDER-WB
