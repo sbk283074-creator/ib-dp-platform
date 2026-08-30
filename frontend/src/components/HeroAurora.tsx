@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useAppState } from '../state';
 import './HeroAurora.css';
 
 const SUBJECTS = [
@@ -22,9 +23,23 @@ const prefersReducedMotion = () =>
 export default function HeroAurora() {
   const rootRef = useRef<HTMLElement>(null);
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
+  const { setPendingQuery } = useAppState();
+  const [q, setQ] = useState('');
 
   const scrollToFilters = () => {
     document.getElementById('filters')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  // Hand the typed query to SearchPage (mounted below on the home route) and
+  // scroll down so the results are visible.
+  const submitSearch = () => {
+    const query = q.trim();
+    if (!query) {
+      scrollToFilters();
+      return;
+    }
+    setPendingQuery(query);
+    scrollToFilters();
   };
 
   // Pointer parallax + scroll progress → CSS variables (no re-render).
@@ -144,10 +159,15 @@ export default function HeroAurora() {
         </p>
 
         <div className="hero-aurora__search">
-          <input placeholder="Search questions, topics, or $LaTeX$ formulas" aria-label="Search" readOnly />
-          <span className="hero-aurora__caret" aria-hidden="true" />
-          <button className="hero-aurora__btn" type="button" onClick={scrollToFilters}>
-            Start Practising
+          <input
+            placeholder="Search questions, topics, or $LaTeX$ formulas"
+            aria-label="Search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(); }}
+          />
+          <button className="hero-aurora__btn" type="button" onClick={submitSearch}>
+            Search
           </button>
         </div>
 

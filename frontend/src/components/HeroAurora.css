@@ -198,10 +198,6 @@
   color: #E6EAFB; font-size: 15px;
 }
 .hero-aurora__search input::placeholder { color: #8b93b8; }
-.hero-aurora__caret {
-  display: inline-block; width: 2px; height: 18px; margin-left: 1px;
-  background: #67e8f9; animation: heroCaret 1s steps(1) infinite; vertical-align: middle;
-}
 .hero-aurora__btn {
   position: relative; overflow: hidden;
   border: none; cursor: pointer;
@@ -264,9 +260,6 @@
 }
 @keyframes heroShine {
   to { background-position: 220% center; }
-}
-@keyframes heroCaret {
-  50% { opacity: 0; }
 }
 @keyframes heroSweep {
   0%,100% { left: -120%; }

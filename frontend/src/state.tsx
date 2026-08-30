@@ -11,6 +11,9 @@ interface AppState {
   addToCollection: (collectionId: string, qid: string) => Promise<void>;
   createCollection: (name: string) => Promise<string>;
   refresh: () => Promise<void>;
+  /** Query typed in the hero search bar, consumed once by SearchPage on mount. */
+  pendingQuery: string;
+  setPendingQuery: (q: string) => void;
 }
 
 const Ctx = createContext<AppState | null>(null);
@@ -19,6 +22,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [favorites, setFavorites] = useState<Record<string, true>>({});
   const [collections, setCollections] = useState<CollectionSummary[]>([]);
   const [kpList, setKpList] = useState<KnowledgePoint[]>([]);
+  const [pendingQuery, setPendingQuery] = useState('');
 
   const refresh = useCallback(async () => {
     try {
@@ -61,7 +65,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   kpList.forEach((k) => { kpMap[k.id] = k; });
 
   return (
-    <Ctx.Provider value={{ favorites, collections, kpList, kpMap, toggleFav, addToCollection, createCollection, refresh }}>
+    <Ctx.Provider value={{ favorites, collections, kpList, kpMap, toggleFav, addToCollection, createCollection, refresh, pendingQuery, setPendingQuery }}>
       {children}
     </Ctx.Provider>
   );

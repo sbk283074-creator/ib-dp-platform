@@ -12,7 +12,7 @@ export default function SearchPage() {
   const [items, setItems] = useState<Question[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { kpList } = useAppState();
+  const { kpList, pendingQuery, setPendingQuery } = useAppState();
 
   const [q, setQ] = useState('');
   const [subject, setSubject] = useState('');
@@ -31,6 +31,25 @@ export default function SearchPage() {
 
   useEffect(() => {
     getFacets().then(setFacets).catch(() => {});
+  }, []);
+
+  // If the hero search bar handed us a query, run that search instead of the
+  // default (empty) initial load, and clear the pending flag so it isn't reused.
+  useEffect(() => {
+    if (!pendingQuery) return;
+    const query = pendingQuery.trim();
+    setPendingQuery('');
+    setQ(query);
+    setLoading(true);
+    getQuestions({
+      q: query, subject: '', topic: '', paper_type: '', command_term: '',
+      difficulty: '', marks: '', knowledge_point: '', category: 'all',
+      limit: PAGE_SIZE, offset: 0, exclude_completed: hideCompleted,
+    })
+      .then((r) => { setItems(r.items); setTotal(r.total); setPage(0); })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Build the query for a given page. `resetToFirst` collapses back to page 0
@@ -60,6 +79,7 @@ export default function SearchPage() {
   // (every 3s, up to ~60s) instead of leaving a permanent "No questions yet".
   // Recovers on its own as soon as the backend is back online.
   useEffect(() => {
+    if (pendingQuery) return; // hero-driven search handles the first load instead
     let cancelled = false;
     let tries = 0;
     const attempt = () => {
