@@ -1,0 +1,302 @@
+/* ============================================================
+   HeroAurora — animated home hero for IB DP Study Platform
+   Deep-space aurora + glassmorphism + decorative pattern + touch/scroll
+   ============================================================ */
+
+.hero-aurora {
+  --px: 0;          /* pointer offset x, normalized -1..1 */
+  --py: 0;          /* pointer offset y, normalized -1..1 */
+  --scroll: 0;      /* scroll progress through hero, 0..1 */
+
+  position: relative;
+  /* Full-bleed: break out of the .content max-width (1100px) container so the
+     hero spans the entire viewport width. overflow-x: clip on .content keeps
+     the 100vw from creating a horizontal scrollbar. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  margin-top: -24px;            /* cancel .content padding-top → flush under sticky topbar */
+  margin-bottom: 28px;
+  min-height: calc(100vh - 64px);  /* fill exactly the space beneath the ~64px topbar */
+  padding: 88px 32px 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  touch-action: manipulation;
+  background:
+    radial-gradient(120% 120% at 50% 0%, #141a3d 0%, #0a0f24 55%, #070a1c 100%);
+  isolation: isolate;
+}
+
+/* ---- Aurora light blobs (keyframe drift + pointer parallax) ---- */
+.hero-aurora__blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.85;
+  mix-blend-mode: screen;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform, translate;
+  translate: calc(var(--px) * 26px) calc(var(--py) * 20px);
+  transition: translate .35s ease-out;
+}
+.hero-aurora__blob--violet {
+  width: 640px; height: 760px; left: -120px; top: -80px;
+  background: radial-gradient(circle at 50% 50%, rgba(124,58,237,0.65), rgba(124,58,237,0) 70%);
+  animation: heroBlobA 26s ease-in-out infinite;
+}
+.hero-aurora__blob--indigo {
+  width: 600px; height: 720px; right: -100px; top: 40px;
+  background: radial-gradient(circle at 50% 50%, rgba(79,70,229,0.6), rgba(79,70,229,0) 70%);
+  animation: heroBlobB 30s ease-in-out infinite;
+}
+.hero-aurora__blob--teal {
+  width: 560px; height: 680px; left: 30%; bottom: -220px;
+  background: radial-gradient(circle at 50% 50%, rgba(6,182,212,0.5), rgba(6,182,212,0) 70%);
+  animation: heroBlobC 34s ease-in-out infinite;
+}
+
+@keyframes heroBlobA {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50%     { transform: translate(60px,40px) scale(1.12); }
+}
+@keyframes heroBlobB {
+  0%,100% { transform: translate(0,0) scale(1.05); }
+  50%     { transform: translate(-50px,30px) scale(0.95); }
+}
+@keyframes heroBlobC {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50%     { transform: translate(20px,-40px) scale(1.1); }
+}
+
+/* ---- Decorative pattern: fine dot grid ---- */
+.hero-aurora__grid {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.10) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(110% 90% at 50% 35%, #000 35%, transparent 78%);
+          mask-image: radial-gradient(110% 90% at 50% 35%, #000 35%, transparent 78%);
+  opacity: 0.5;
+  z-index: 1;
+  pointer-events: none;
+  translate: calc(var(--px) * 12px) calc(var(--py) * 10px);
+}
+
+/* ---- Decorative pattern: slowly rotating topographic contours ---- */
+.hero-aurora__contours {
+  position: absolute;
+  right: -160px; top: 50%;
+  width: 720px; height: 720px;
+  transform: translateY(-50%);
+  z-index: 1;
+  opacity: 0.35;
+  pointer-events: none;
+  animation: heroContour 64s linear infinite;
+  translate: calc(var(--px) * -18px) calc(var(--py) * -14px);
+}
+.hero-aurora__contours svg { width: 100%; height: 100%; display: block; }
+.hero-aurora__contours path { fill: none; stroke: rgba(167,199,255,0.55); stroke-width: 1; }
+
+@keyframes heroContour {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to   { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* ---- Decorative pattern: drifting particles ---- */
+.hero-aurora__particles { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.hero-aurora__particle {
+  position: absolute;
+  bottom: -20px;
+  width: 6px; height: 6px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 50% 50%, rgba(199,210,254,0.95), rgba(199,210,254,0) 70%);
+  animation: heroParticle linear infinite;
+  will-change: transform, opacity;
+}
+@keyframes heroParticle {
+  0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+  10%  { opacity: 0.9; }
+  90%  { opacity: 0.7; }
+  100% { transform: translateY(-640px) scale(1); opacity: 0; }
+}
+
+/* ---- Touch ripple layer ---- */
+.hero-aurora__ripples { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+.hero-aurora__ripple {
+  position: absolute;
+  width: 16px; height: 16px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(167,199,255,0.55), rgba(167,199,255,0) 70%);
+  transform: translate(-50%, -50%) scale(0);
+  animation: heroRipple .7s ease-out forwards;
+}
+@keyframes heroRipple {
+  to { transform: translate(-50%, -50%) scale(16); opacity: 0; }
+}
+
+/* ---- Foreground content (scroll parallax) ---- */
+.hero-aurora__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  max-width: 920px;
+  transform-origin: center top;
+  transform: translateY(calc(var(--scroll) * -54px)) scale(calc(1 - var(--scroll) * 0.05));
+  opacity: calc(1 - var(--scroll) * 0.85);
+}
+
+.hero-aurora__badge {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  font-size: 13px; letter-spacing: 0.4px; color: #C7D2FE;
+  animation: heroRise 0.7s 0.05s both cubic-bezier(.2,.8,.2,1);
+}
+.hero-aurora__dot {
+  width: 8px; height: 8px; border-radius: 9999px;
+  background: #06b6d4; box-shadow: 0 0 10px 2px rgba(6,182,212,0.8);
+}
+
+.hero-aurora__title {
+  margin: 0;
+  font-size: clamp(40px, 6vw, 66px);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.5px;
+  background: linear-gradient(100deg, #a5b4fc 0%, #ffffff 45%, #67e8f9 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  animation: heroRise 0.7s 0.15s both cubic-bezier(.2,.8,.2,1), heroShine 7s 0.9s linear infinite;
+}
+
+.hero-aurora__subtitle {
+  margin: 0;
+  max-width: 620px;
+  font-size: 18px; line-height: 1.6; color: #AAB3D6;
+  animation: heroRise 0.7s 0.28s both cubic-bezier(.2,.8,.2,1);
+}
+
+.hero-aurora__search {
+  display: flex; align-items: center; gap: 10px;
+  width: min(540px, 92vw);
+  padding: 8px 8px 8px 18px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  box-shadow: 0 18px 50px -20px rgba(79,70,229,0.6);
+  animation: heroRise 0.7s 0.4s both cubic-bezier(.2,.8,.2,1);
+}
+.hero-aurora__search input {
+  flex: 1; border: none; outline: none; background: transparent;
+  color: #E6EAFB; font-size: 15px;
+}
+.hero-aurora__search input::placeholder { color: #8b93b8; }
+.hero-aurora__caret {
+  display: inline-block; width: 2px; height: 18px; margin-left: 1px;
+  background: #67e8f9; animation: heroCaret 1s steps(1) infinite; vertical-align: middle;
+}
+.hero-aurora__btn {
+  position: relative; overflow: hidden;
+  border: none; cursor: pointer;
+  padding: 11px 20px; border-radius: 11px;
+  font-size: 15px; font-weight: 600; color: #0a0f24;
+  background: linear-gradient(100deg, #a5b4fc, #67e8f9);
+  white-space: nowrap;
+}
+.hero-aurora__btn::after {
+  content: ''; position: absolute; top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.65), transparent);
+  transform: skewX(-18deg);
+  animation: heroSweep 4.5s 1s ease-in-out infinite;
+}
+.hero-aurora__btn:hover { filter: brightness(1.05); }
+
+.hero-aurora__cards {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
+  margin-top: 8px;
+  animation: heroRise 0.7s 0.55s both cubic-bezier(.2,.8,.2,1);
+}
+.hero-aurora__card {
+  width: 200px;
+  padding: 18px 18px 16px;
+  border-radius: 18px;
+  text-align: left;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.12);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease, scale .2s ease;
+  animation: heroFloat 7s ease-in-out infinite;
+  translate: calc(var(--px) * 10px) calc(var(--py) * 8px);
+}
+.hero-aurora__card:nth-child(2) { animation-delay: -2.3s; }
+.hero-aurora__card:nth-child(3) { animation-delay: -4.6s; }
+.hero-aurora__card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(167,139,250,0.6);
+  box-shadow: 0 22px 50px -18px rgba(124,58,237,0.7);
+}
+.hero-aurora__card:active { scale: 0.97; }
+.hero-aurora__card-num {
+  font-size: 30px; font-weight: 800; color: #E6EAFB;
+  line-height: 1.1;
+}
+.hero-aurora__card-label {
+  margin-top: 4px; font-size: 14px; color: #AAB3D6;
+}
+.hero-aurora__card-tag {
+  display: inline-block; margin-top: 12px;
+  font-size: 12px; letter-spacing: 0.4px;
+  color: #67e8f9;
+}
+
+/* ---- Keyframes ---- */
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroShine {
+  to { background-position: 220% center; }
+}
+@keyframes heroCaret {
+  50% { opacity: 0; }
+}
+@keyframes heroSweep {
+  0%,100% { left: -120%; }
+  35%,60% { left: 130%; }
+}
+@keyframes heroFloat {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-10px); }
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-aurora__blob,
+  .hero-aurora__contours,
+  .hero-aurora__particle,
+  .hero-aurora__title,
+  .hero-aurora__badge,
+  .hero-aurora__subtitle,
+  .hero-aurora__search,
+  .hero-aurora__cards,
+  .hero-aurora__card,
+  .hero-aurora__btn::after,
+  .hero-aurora__caret {
+    animation: none !important;
+  }
+  .hero-aurora__title { background-position: 0 center; }
+  .hero-aurora__inner { transform: none !important; opacity: 1 !important; }
+}
