@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, NavLink } from 'react-router-dom';
+import { Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import { AppStateProvider, useAppState } from './state';
 import SearchPage from './pages/SearchPage';
 import PracticePage from './pages/PracticePage';
@@ -13,6 +13,7 @@ import ExamsPage from './pages/ExamsPage';
 import BooksPage from './pages/BooksPage';
 import BookDetailPage from './pages/BookDetailPage';
 import ReportsPage from './pages/ReportsPage';
+import HeroAurora from './components/HeroAurora';
 import { getWrongQuestions, getExams, getReports } from './api';
 
 const tabs = [
@@ -34,6 +35,8 @@ function Shell() {
   const [examCount, setExamCount] = useState(0);
   const [reportCount, setReportCount] = useState(0);
   const { favorites, collections } = useAppState();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     getWrongQuestions(false).then((list) => setWrongCount(list.length)).catch(() => {});
@@ -58,6 +61,7 @@ function Shell() {
           ))}
         </nav>
       </header>
+      {isHome && <HeroAurora />}
       <main className="content">
         <Routes>
           <Route path="/" element={<SearchPage />} />

@@ -3,7 +3,6 @@ import { getFacets, getQuestions } from '../api';
 import { useAppState } from '../state';
 import type { Facets, Question, QuestionQuery } from '../types';
 import QuestionCard from '../components/QuestionCard';
-import HeroAurora from '../components/HeroAurora';
 
 type Category = 'all' | 'book' | 'past' | 'topic' | 'questionbank';
 const PAGE_SIZE = 50;
@@ -104,9 +103,7 @@ export default function SearchPage() {
   }
 
   return (
-    <>
-      <HeroAurora />
-      <div className="search-layout">
+    <div className="search-layout">
       <aside className="filters" id="filters">
         <h3>Filters</h3>
         <label>Search
@@ -202,7 +199,6 @@ export default function SearchPage() {
           </div>
         )}
       </section>
-      </div>
-    </>
+    </div>
   );
 }

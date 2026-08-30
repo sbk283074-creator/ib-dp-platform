@@ -44,7 +44,7 @@ body {
 .navlink:hover { background: var(--bg); }
 .navlink.active { background: var(--accent); color: var(--primary-700); font-weight: 600; }
 
-.content { padding: 24px; max-width: 1100px; margin: 0 auto; overflow-x: clip; }
+.content { padding: 24px; max-width: 1100px; margin: 0 auto; }
 
 .search-layout, .export-layout { display: grid; grid-template-columns: 260px 1fr; gap: 24px; align-items: start; }
 .filters {

@@ -9,14 +9,9 @@
   --scroll: 0;      /* scroll progress through hero, 0..1 */
 
   position: relative;
-  /* Full-bleed: break out of the .content max-width (1100px) container so the
-     hero spans the entire viewport width. overflow-x: clip on .content keeps
-     the 100vw from creating a horizontal scrollbar. */
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  margin-top: -24px;            /* cancel .content padding-top → flush under sticky topbar */
-  margin-bottom: 28px;
+  /* Rendered as a full-width sibling of <main>, so it naturally spans the viewport. */
+  width: 100%;
+  margin: 0 0 28px;
   min-height: calc(100vh - 64px);  /* fill exactly the space beneath the ~64px topbar */
   padding: 88px 32px 72px;
   display: flex;
