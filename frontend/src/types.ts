@@ -149,7 +149,7 @@ export interface CollectionDetail {
   items: Question[];
 }
 
-// 错题本 (wrong-question notebook).
+// Wrong-question notebook.
 export interface WrongQuestion extends Question {
   times_wrong: number;
   added_at: string;

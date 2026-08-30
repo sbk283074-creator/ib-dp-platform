@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import './HeroAurora.css';
 
 const SUBJECTS = [
-  { num: '2,725', label: 'Math AA HL · 历年真题', tag: 'Past papers' },
-  { num: '1,827', label: 'Physics HL · 历年真题', tag: 'Past papers' },
+  { num: '2,725', label: 'Math AA HL · Past Papers', tag: 'Past papers' },
+  { num: '1,827', label: 'Physics HL · Past Papers', tag: 'Past papers' },
   { num: '1,107', label: 'Computer Science HL', tag: 'Past papers' },
 ];
 
@@ -134,20 +134,20 @@ export default function HeroAurora() {
       <div className="hero-aurora__inner">
         <span className="hero-aurora__badge">
           <span className="hero-aurora__dot" />
-          IB Diploma Programme · 真题与分章练习
+          IB Diploma Programme · Past Papers & Topic Practice
         </span>
 
-        <h1 className="hero-aurora__title">IB DP 学习平台</h1>
+        <h1 className="hero-aurora__title">IB DP Study Platform</h1>
 
         <p className="hero-aurora__subtitle">
-          历年真题 · 分章练习 · 智能复习。一套为 DP 考生打造的一站式备考系统。
+          Past papers, topic questions, and smart revision — an all-in-one study system built for DP candidates.
         </p>
 
         <div className="hero-aurora__search">
-          <input placeholder="搜索题目、知识点或 $LaTeX$ 公式" aria-label="搜索" readOnly />
+          <input placeholder="Search questions, topics, or $LaTeX$ formulas" aria-label="Search" readOnly />
           <span className="hero-aurora__caret" aria-hidden="true" />
           <button className="hero-aurora__btn" type="button" onClick={scrollToFilters}>
-            开始刷题
+            Start Practising
           </button>
         </div>
 

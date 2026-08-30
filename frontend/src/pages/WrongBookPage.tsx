@@ -116,7 +116,7 @@ export default function WrongBookPage() {
   return (
     <div className="wrongbook">
       <div className="wrongbook-head">
-        <h3>错题本 · Wrong-question notebook</h3>
+        <h3>Wrong Book</h3>
         <div className="wrongbook-actions">
           <label className="inline-check">
             <input type="checkbox" checked={showMastered} onChange={(e) => setShowMastered(e.target.checked)} />

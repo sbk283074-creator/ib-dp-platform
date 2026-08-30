@@ -161,7 +161,7 @@ export function saveQuestionNote(question_id: string, note: string): Promise<voi
 }
 
 // ---------------------------------------------------------------------------
-// 错题本 (wrong-question notebook)
+// Wrong-question notebook
 // ---------------------------------------------------------------------------
 export function getWrongQuestions(opts: { includeMastered?: boolean; dueOnly?: boolean } = {}): Promise<WrongQuestion[]> {
   const params = new URLSearchParams();
