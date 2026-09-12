@@ -6,6 +6,7 @@ import { getQuestionNote, saveQuestionNote, patchProgress, getSimilar, createRep
 import { REPORT_REASONS } from '../types';
 import RichText from './RichText';
 import Lightbox from './Lightbox';
+import AskAI from './AskAI';
 
 function Badge({ children }: { children: React.ReactNode }) {
   return <span className="badge">{children}</span>;
@@ -317,6 +318,8 @@ export default function QuestionCard({ q, source, onReview }: { q: Question; sou
           {justSaved && <div className="note-saved">Saved ✓</div>}
         </div>
       )}
+
+      <AskAI q={q} />
 
       {zoomSrc && <Lightbox src={zoomSrc} onClose={() => setZoomSrc(null)} />}
 

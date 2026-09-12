@@ -318,6 +318,101 @@ export function updateReport(id: string, patch: { status?: 'open' | 'resolved' |
   });
 }
 
+// ---------------------------------------------------------------------------
+// AI study assistant (Groq free tier). The API key stays server-side; the
+// browser only ever sees { configured, model } or the final answer text.
+// ---------------------------------------------------------------------------
+export interface AIModelCaps {
+  vendor: string;
+  size: string;
+  strengths: string[];
+  bestFor: string;
+  note?: string;
+}
+
+export interface AIModelStatus {
+  id: string;
+  label: string;
+  cache: boolean;
+  unknown?: boolean;
+  rpm: number | null;
+  rpd: number | null;
+  tpm: number | null;
+  tpd: number | null; // null = unlimited
+  tpdRemaining: number | null; // null = unlimited
+  used: number;
+  tokensUsed: number;
+  remaining: number | null;
+  available: boolean;
+  reason?: string | null;
+  retryAfter?: number | null;
+  caps?: AIModelCaps | null;
+}
+
+export interface AIIntentMatrix {
+  complexity: string[];
+  length: string[];
+  recommend: Record<string, Record<string, { model: string; reason: string }>>;
+}
+
+export interface AIStatus {
+  configured: boolean;
+  model: string | null;
+  maxTokens?: number;
+  pool?: AIModelStatus[];
+  intentMatrix?: AIIntentMatrix;
+  aggregate?: {
+    models: number;
+    rpd: number;
+    rpdRemaining: number;
+    tpd: number | null;
+    cacheEligibleModels: number;
+    unlimitedTpdModels: number;
+    availableNow: number;
+  };
+  resetInSeconds?: number;
+}
+
+export interface AIAskResponse {
+  ok: boolean;
+  answer?: string;
+  model?: string | null;
+  cached?: boolean;
+  quota?: {
+    remaining?: string | null;
+    limit?: string | null;
+    resetsIn?: string | null;
+    tokensUsed?: number;
+    cachedTokens?: number;
+    poolExhausted?: boolean;
+    resetsInSeconds?: number;
+  } | null;
+  error?: string;
+  message?: string;
+  retryAfter?: number | null;
+}
+
+export function getAIStatus(): Promise<AIStatus> {
+  return getJSON('/api/ask/status');
+}
+
+export function askAI(body: {
+  message: string;
+  questionId?: string;
+  subject?: string;
+  topic?: string;
+  marks?: number | null;
+  model?: string;
+  complexity?: 'simple' | 'standard' | 'deep';
+  length?: 'short' | 'medium' | 'long';
+}): Promise<AIAskResponse> {
+  return getJSON('/api/ask', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+}
+
 // Review workflow: mark a freshly-imported question as reviewed ('done') or
 // reset it back to 'new' (reopen for another pass).
 export function setReviewStatus(id: string, status: 'new' | 'done'): Promise<{ ok: boolean; review_status: string }> {
