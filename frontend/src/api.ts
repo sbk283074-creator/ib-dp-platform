@@ -23,7 +23,7 @@ export interface QuestionQuery {
   marks?: number | '';
   tag?: string;
   knowledge_point?: string;
-  category?: 'all' | 'book' | 'past' | 'topic' | 'ai' | 'questionbank';
+  category?: 'all' | 'book' | 'past' | 'topic' | 'ai' | 'questionbank' | 'mock';
   review_status?: 'new' | 'done' | null;
   sort?: string;
   limit?: number;
@@ -230,6 +230,17 @@ export function getBooks(subject?: string): Promise<Book[]> {
 
 export function getBook(id: string): Promise<{ book: Book; sections: Record<string, Question[]>; questions: Question[] }> {
   return getJSON(`/api/books/${id}`);
+}
+
+/** Absolute URL of the original book PDF, streamed by the backend. */
+export function getBookFileUrl(id: string): string {
+  const API_HOST = (import.meta as any).env?.VITE_API_BASE_URL || '';
+  return `${API_HOST}/api/books/${encodeURIComponent(id)}/file`;
+}
+
+/** Whether the backend can actually serve the full book PDF on this machine. */
+export function getBookAvailability(id: string): Promise<{ id: string; has_file: boolean }> {
+  return getJSON(`/api/books/${encodeURIComponent(id)}/availability`);
 }
 
 // ---------------------------------------------------------------------------

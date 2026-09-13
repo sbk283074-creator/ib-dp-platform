@@ -58,7 +58,7 @@ export default function BooksPage() {
           </h2>
           <div className="book-grid">
             {grouped[s].map((b) => (
-              <Link key={b.id} to={`/books/${b.id}`} className="book-card">
+              <div key={b.id} className="book-card">
                 <div className="book-card-head">
                   <span className="book-publisher">{b.publisher || 'Publisher'}</span>
                   <span className="book-count">{b.total_questions} Q</span>
@@ -73,7 +73,15 @@ export default function BooksPage() {
                   )}
                   {b.answer_source && <span className="muted small">· {b.answer_source}</span>}
                 </div>
-              </Link>
+                <div className="book-actions">
+                  <Link className="book-action primary" to={`/books/${b.id}/read`}>
+                    📖 Read full book
+                  </Link>
+                  <Link className="book-action" to={`/books/${b.id}`}>
+                    ✏️ Practice questions
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
         </section>

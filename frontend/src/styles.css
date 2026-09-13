@@ -176,6 +176,29 @@ button { cursor: pointer; font-size: 14px; border-radius: 8px; padding: 8px 14px
 .book-section-title { font-size: 16px; margin: 14px 0 10px; padding: 6px 12px; background: var(--bg-elev); border-left: 3px solid var(--primary); border-radius: 4px; }
 .back-link { font-size: 13px; color: var(--muted); text-decoration: none; }
 .back-link:hover { color: var(--primary); }
+
+/* Two entries per book: full-book reader + extracted practice questions */
+.book-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.book-action {
+  flex: 1 1 auto; text-align: center; padding: 7px 12px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none;
+  color: inherit; background: var(--bg); transition: border-color .15s, background .15s;
+}
+.book-action:hover { border-color: var(--primary); color: var(--primary); }
+.book-action.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+.book-action.primary:hover { filter: brightness(1.06); color: #fff; }
+
+.reader-page { display: flex; flex-direction: column; }
+.reader-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.btn-secondary {
+  padding: 7px 14px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 13px; font-weight: 600; text-decoration: none; color: inherit; background: var(--bg-elev);
+}
+.btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+.book-reader {
+  width: 100%; height: calc(100vh - 230px); min-height: 560px;
+  border: 1px solid var(--border); border-radius: 10px; background: #fff; margin-top: 10px;
+}
 .card-stack { display: flex; flex-direction: column; gap: 14px; }
 .seg-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
 

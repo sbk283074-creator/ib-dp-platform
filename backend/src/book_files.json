@@ -1,0 +1,102 @@
+{
+ "MA-HAESE-CORE1": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/HAESE AND HARRIS 最新教材/Mathematics - Core Topics HL 1 - Haese 2019.pdf",
+  "title": "Mathematics: Core Topics HL 1 (Haese)",
+  "subject": "Mathematics"
+ },
+ "MA-HAESE-AA2": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/HAESE AND HARRIS 最新教材/Mathematics - Analysis and Approaches HL 2 - Haese 2019.pdf",
+  "title": "Mathematics: Analysis and Approaches HL 2 (Haese)",
+  "subject": "Mathematics"
+ },
+ "MA-OXFORD-2019": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/HL OXFPRD 教材/Mathematics HL - Analysis and Approaches - OXFORD 2019.pdf",
+  "title": "Mathematics: Analysis and Approaches HL (Oxford)",
+  "subject": "Mathematics"
+ },
+ "MA-HODDER-2019": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/Mathematics - Analysis and Approaches HL - Hodder 2019.pdf",
+  "title": "Mathematics for the IB Diploma: AA HL (Hodder)",
+  "subject": "Mathematics"
+ },
+ "MA-CAMBRIDGE-2012": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/CAMBRIDGE/Mathematics HL - Fannon, Kadelburg, Woolley and Ward - Cambridge 2012.pdf",
+  "title": "Mathematics for the IB Diploma HL (Cambridge)",
+  "subject": "Mathematics"
+ },
+ "MA-IBID-2017": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/IBID/Mathematics HL Core - Buckle, Cirrito, Dunbar, Henry, Hung and McAuliffe - Fifth Edition - IBID 2017.pdf",
+  "title": "Mathematics HL Core (IBID, 5th ed)",
+  "subject": "Mathematics"
+ },
+ "MA-IBID-2004": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/IBID/Mathematics Higher Level (CORE) - Fabio Cirrito - Third Edition - IBID 2004.pdf",
+  "title": "Mathematics Higher Level Core (IBID, 3rd ed)",
+  "subject": "Mathematics"
+ },
+ "MA-HODDER-WB": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/HL Workbook/Mathematics - Analysis and Approaches HL - Exam Practice Workbook - Hodder 2021.pdf",
+  "title": "AA HL Exam Practice Workbook (Hodder)",
+  "subject": "Mathematics"
+ },
+ "MA-HAESE-REV": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/HAESE Workbook/Mathematics - Analysis and Approaches HL 2 - REVISION GUIDE - Haese 2020.pdf",
+  "title": "AA HL 2 Revision Guide (Haese)",
+  "subject": "Mathematics"
+ },
+ "MA-CAMB-EXAMPREP": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/CAMBRIDGE/Mathematics HL - Exam Preparation Guide - Fannon, Kadelburg, Woolley and Ward - Cambridge 2015.pdf",
+  "title": "Mathematics HL Exam Preparation Guide (Cambridge)",
+  "subject": "Mathematics"
+ },
+ "PH-TSOKOS-CB": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/Physics Coursebook- K.A. Tsokos - Seventh Edition - Cambridge （epub转化版）.pdf",
+  "title": "Physics for the IB Diploma Coursebook (Tsokos, 7th ed)",
+  "subject": "Physics"
+ },
+ "PH-OXFORD-CB": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/Physics-HLSL-Oxford Textbook(First exam 2025)/Physics - Course Companion - Homer, Piętka and Heathcote - Fifth Edition - Oxford 2023.pdf",
+  "title": "Physics Course Companion (Oxford, 5th ed)",
+  "subject": "Physics"
+ },
+ "PH-CAMBRIDGE-WB": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/Physics-HLSL-Cambridge-Workbook(First exam 2025)/CAMBRIDGE Physics for the IB Diploma WORKBOOK - Seventh Edition - Cambridge 2023 (Digital Edition).pdf",
+  "title": "Physics for the IB Diploma Workbook (Cambridge)",
+  "subject": "Physics"
+ },
+ "PH-TSOKOS-WB": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/Physics-HLSL-Cambridge-Workbook(First exam 2025)/Physics - WORKBOOK - K.A. Tsokos - Seventh Edition - Cambridge 2023（扫描版）.pdf",
+  "title": "Physics Workbook (Tsokos, 7th ed)",
+  "subject": "Physics"
+ },
+ "CS-OXFORD-2025": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/Computer Science - MacKenty and Stephenson - Oxford 2025.pdf",
+  "title": "Computer Science for the IB Diploma (Oxford)",
+  "subject": "Computer Science"
+ },
+ "MA-CAMB-OPT7": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/CAMBRIDGE/Mathematics HL - OPTION 7 Statistics and Probability - Fannon, Kadelburg, Woolley and Ward - Cambridge 2012.pdf",
+  "title": "Math HL Option 7: Statistics and Probability (Cambridge)",
+  "subject": "Mathematics"
+ },
+ "MA-CAMB-OPT8": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/CAMBRIDGE/Mathematics HL - OPTION 8 Sets, Relations and Groups - Fannon, Kadelburg, Woolley and Ward - Cambridge 2012.pdf",
+  "title": "Math HL Option 8: Sets, Relations and Groups (Cambridge)",
+  "subject": "Mathematics"
+ },
+ "MA-CAMB-OPT9": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/CAMBRIDGE/Mathematics HL - OPTION 9 Calculus - Fannon, Kadelburg, Woolley and Ward - Cambridge 2012.pdf",
+  "title": "Math HL Option 9: Calculus (Cambridge)",
+  "subject": "Mathematics"
+ },
+ "MA-CAMB-OPT10": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/CAMBRIDGE/Mathematics HL - OPTION 10 Discrete Mathematics - Fannon, Kadelburg, Woolley and Ward - Cambridge 2012.pdf",
+  "title": "Math HL Option 10: Discrete Mathematics (Cambridge)",
+  "subject": "Mathematics"
+ },
+ "MA-PEARSON-2019": {
+  "path": "/Users/lucas.ma/Downloads/dp learning/Mathematics HL - Analysis and Approaches (Pearson 2019).pdf",
+  "title": "Mathematics AA HL (Pearson)",
+  "subject": "Mathematics"
+ }
+}

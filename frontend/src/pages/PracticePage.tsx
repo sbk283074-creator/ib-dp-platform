@@ -14,7 +14,7 @@ export default function PracticePage() {
   const [topic, setTopic] = useState('');
   const [paper_type, setPaperType] = useState('');
   const [selectedKps, setSelectedKps] = useState<string[]>([]);
-  const [category, setCategory] = useState<'all' | 'book' | 'past' | 'topic' | 'questionbank'>('all');
+  const [category, setCategory] = useState<'all' | 'book' | 'past' | 'topic' | 'questionbank' | 'mock'>('all');
   const [limit, setLimit] = useState(10);
   const [attempted, setAttempted] = useState(false);
 
@@ -155,6 +155,7 @@ export default function PracticePage() {
           <button className={'seg-btn' + (category === 'all' ? ' on' : '')} onClick={() => setCategory('all')}>All</button>
           <button className={'seg-btn' + (category === 'book' ? ' on' : '')} onClick={() => setCategory('book')}>Books</button>
           <button className={'seg-btn' + (category === 'past' ? ' on' : '')} onClick={() => setCategory('past')}>Past papers</button>
+          <button className={'seg-btn' + (category === 'mock' ? ' on' : '')} onClick={() => setCategory('mock')}>Mock papers</button>
           <button className={'seg-btn' + (category === 'topic' ? ' on' : '')} onClick={() => setCategory('topic')}>Topic questions</button>
           <button className={'seg-btn' + (category === 'questionbank' ? ' on' : '')} onClick={() => setCategory('questionbank')}>Question bank</button>
         </div>

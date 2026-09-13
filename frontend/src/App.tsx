@@ -12,6 +12,7 @@ import ImportPage from './pages/ImportPage';
 import ExamsPage from './pages/ExamsPage';
 import BooksPage from './pages/BooksPage';
 import BookDetailPage from './pages/BookDetailPage';
+import BookReaderPage from './pages/BookReaderPage';
 import ReportsPage from './pages/ReportsPage';
 import HeroAurora from './components/HeroAurora';
 import { getWrongQuestions, getExams, getReports } from './api';
@@ -77,6 +78,7 @@ function Shell() {
           <Route path="/import" element={<ImportPage />} />
           <Route path="/books" element={<BooksPage />} />
           <Route path="/books/:id" element={<BookDetailPage />} />
+          <Route path="/books/:id/read" element={<BookReaderPage />} />
           <Route path="/reports" element={<ReportsPage />} />
         </Routes>
       </main>

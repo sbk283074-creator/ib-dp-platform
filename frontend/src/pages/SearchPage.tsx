@@ -4,7 +4,7 @@ import { useAppState } from '../state';
 import type { Facets, Question, QuestionQuery } from '../types';
 import QuestionCard from '../components/QuestionCard';
 
-type Category = 'all' | 'book' | 'past' | 'topic' | 'questionbank';
+type Category = 'all' | 'book' | 'past' | 'topic' | 'questionbank' | 'mock';
 const PAGE_SIZE = 50;
 
 export default function SearchPage() {
@@ -135,6 +135,7 @@ export default function SearchPage() {
             <button className={'seg-btn' + (category === 'all' ? ' on' : '')} onClick={() => { setCategory('all'); runSearch(); }}>All</button>
             <button className={'seg-btn' + (category === 'book' ? ' on' : '')} onClick={() => { setCategory('book'); runSearch(); }}>Books</button>
             <button className={'seg-btn' + (category === 'past' ? ' on' : '')} onClick={() => { setCategory('past'); runSearch(); }}>Past papers</button>
+            <button className={'seg-btn' + (category === 'mock' ? ' on' : '')} onClick={() => { setCategory('mock'); runSearch(); }}>Mock papers</button>
             <button className={'seg-btn' + (category === 'topic' ? ' on' : '')} onClick={() => { setCategory('topic'); runSearch(); }}>Topic questions</button>
             <button className={'seg-btn' + (category === 'questionbank' ? ' on' : '')} onClick={() => { setCategory('questionbank'); runSearch(); }}>Question bank</button>
           </div>
