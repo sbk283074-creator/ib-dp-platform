@@ -26,11 +26,21 @@ BASE = "/Users/lucas.ma/Downloads/dp learning/Physics-HL-Past Papers&Mark Scheme
 ROOT = "/Users/lucas.ma/Downloads/dp learning/ib-dp-platform"
 FIG = os.path.join(ROOT, "backend/public/figures")
 MANIFEST = os.path.join(ROOT, "backend/data/physics_old_manifest.json")
+# Scope filter: only (re-)extract these sessions. Set to None to process all 2000-2015.
+# Used to fill the single missing, text-layer session (1999 is scanned -> excluded).
+# NOTE: leave this scoped. Setting to None reprocesses the whole 2000-2015 band — it is
+# idempotent per-source, but P1_HEAD was later relaxed (now accepts digit-start stems) which
+# may change pre-2005 extraction; the 2000-2014 rows already in the DB are good, so avoid
+# an uncontrolled re-run unless you intend to re-verify those years by hand.
+TARGET = {"2015 November Examination Session"}
 DPI = 170
 SCALE = DPI / 72.0
 
-P1_HEAD = re.compile(r'(?m)(?:^|[\r\n\ufffe])\s*(\d{1,2})\.(?!\d)\s+(?=[A-Z(])')
+P1_HEAD = re.compile(r'(?m)(?:^|[\r\n\ufffe])\s*(\d{1,2})\.(?!\d)\s+(?=[A-Z(0-9])')
 SEC_Q = re.compile(r'(?m)(?:^|[\r\n\ufffe])\s*([A-Z])(\d{1,2})\.(?!\d)\s+')
+# Plain (un-prefixed) sequential "N." headers — used for 2015-Nov P2 (global 1..9)
+# and P3 (global 1..24), where the modern section/option-prefixed detectors fail.
+PLAIN_HEAD = re.compile(r'(?m)(?:^|[\r\n\ufffe])\s*(\d{1,2})\.(?!\d)\s')
 MC_KEY = re.compile(r'(?<!\d)(\d{1,2})\.\s*([ABCD\u2013-])')
 MARKS = re.compile(r'\[(\d+)\]')
 ENDSKIP = re.compile(r'^\s*(?:Answers written on this page|Please do not write on this page)\s*$', re.I)
@@ -91,6 +101,9 @@ def clean(text):
         if re.match(r'^[-–]\s*\d+\s*[-–]', s): continue
         if re.match(r'^\d{2}EP\d{2}$', s): continue
         if re.search(r'(?:M|N|O)\d{2}/4/PHYSI', s): continue
+        # Page-continuation headers that split a question/option across a page
+        # break, e.g. "(Question 1 continued)" / "(Option E, question 2 continued)".
+        if re.match(r'^\((?:question|option)[^)]*continued\)$', s, re.I): continue
         out.append(line)
     text = normalize_physics('\n'.join(out))
     text = re.sub(r'\n{3,}', '\n\n', text)
@@ -370,20 +383,143 @@ def p3_records(dirname, filename):
     qd.close(); md.close()
     return records
 
+def _plain_seq_hits(text, offsets, doc, pages, start, end):
+    """Sequential 1..N plain 'N.' headers within ABSOLUTE bounds [start,end).
+
+    Searches the FULL text (not a slice) and skips any match before `start`, so
+    `hit_dict` receives an m whose m.start(1) is the true absolute offset. The
+    previous version sliced text[start:end] and passed that m to hit_dict, which
+    recomputed a RELATIVE position -> every hit landed at pos 0 (cover text).
+
+    Tolerant: a duplicate (n<expected) or a stray upward jump (n>expected, e.g.
+    a "22." inside a worked solution) is skipped without breaking the run."""
+    hits = []; expected = 1
+    for m in PLAIN_HEAD.finditer(text):
+        apos = m.start(1)
+        if apos < start:
+            continue
+        if apos >= end:
+            break
+        n = int(m.group(1))
+        if n < expected:
+            continue
+        if n > expected:
+            continue
+        hits.append(hit_dict(doc, pages, offsets, m, group=1))
+        expected += 1
+    return hits
+
+def _first_real_one(text):
+    """Absolute position of the first '1.' header immediately followed by a
+    subpart label such as '(a)' / '(i)' — i.e. the genuine markscheme answer
+    start. This skips the 6-line instructional preamble ('1. A markscheme…'
+    … '6. The order of marking points…') that precedes the real answers in IB
+    markschemes. Returns None when no such marker exists (e.g. a question
+    paper that has no preamble), so callers fall back to start=0."""
+    for m in PLAIN_HEAD.finditer(text):
+        after = text[m.end():m.end() + 24]
+        if re.search(r'\([a-iA-I1-9]\)', after):
+            return m.start(1)
+    return None
+
+def p2_plain_records(dirname, filename):
+    qp = os.path.join(BASE, dirname, filename)
+    ms = qp[:-4] + '_markscheme.pdf'
+    if not os.path.exists(ms): return []
+    qd, qpages, qfull, qoff = load(qp)
+    md, mpages, mfull, moff = load(ms)
+    # Anchor QP at its first "1." (no preamble in question papers). For the
+    # markscheme, skip the 6-line instructional preamble and start at the first
+    # real answer ("1. (a)…").
+    qs = _first_real_one(qfull); qs = qs if qs is not None else 0
+    ms_ = _first_real_one(mfull); ms_ = ms_ if ms_ is not None else 0
+    qq = _plain_seq_hits(qfull, qoff, qd, qpages, qs, len(qfull))
+    mm = _plain_seq_hits(mfull, moff, md, mpages, ms_, len(mfull))
+    if not (len(qq) >= 6 and len(mm) == len(qq)):
+        qd.close(); md.close(); return []
+    slug = slug_for(dirname, filename)
+    tz = re.search(r'TZ\d+', filename); tzlab = (' ' + tz.group(0)) if tz else ''
+    folder = f"physics_hl_p2/{slug}"
+    qimgs = image_segments(qd, qpages, qoff, qq, folder, 'q', skip_spacers=True)
+    aimgs = image_segments(md, mpages, moff, mm, folder, 'a', skip_spacers=False)
+    records = []
+    for i, h in enumerate(qq):
+        qend = qq[i + 1]['pos'] if i + 1 < len(qq) else len(qfull)
+        ast = mm[i]['pos']; aend = mm[i + 1]['pos'] if i + 1 < len(mm) else len(mfull)
+        qt = clean(qfull[h['pos']:qend]); at = clean(mfull[ast:aend])
+        mk = sum(int(x) for x in MARKS.findall(qt)) or None
+        records.append({
+            'id': f"PHYS_HL_P2_{slug}_q{i + 1:02d}",
+            'subject': 'Physics', 'level': 'HL', 'topic': 'Physics HL', 'subtopic': None,
+            'paper_type': 'Paper 2', 'command_term': None, 'marks': mk, 'difficulty': None,
+            'question': qt, 'figure': None, 'answer': at, 'explanation': None,
+            'source': f"Physics HL P2 · {session_label(dirname)}{tzlab}",
+            'tags': [], 'authored_by': 'ib', 'knowledge_point_ids': [], 'answer_figure': None,
+            'question_image': ','.join(qimgs[i]), 'answer_image': ','.join(aimgs[i]),
+            'figure_image': None, 'book_id': None, 'source_type': 'paper',
+            'category': 'past', 'review_status': 'new',
+        })
+    qd.close(); md.close(); return records
+
+# ---------------- P3 (plain, grouped by Option) ----------------
+def p3_plain_records(dirname, filename):
+    qp = os.path.join(BASE, dirname, filename)
+    ms = qp[:-4] + '_markscheme.pdf'
+    if not os.path.exists(ms): return []
+    qd, qpages, qfull, qoff = load(qp)
+    md, mpages, mfull, moff = load(ms)
+    qs = _first_real_one(qfull); qs = qs if qs is not None else 0
+    ms_ = _first_real_one(mfull); ms_ = ms_ if ms_ is not None else 0
+    qhits = _plain_seq_hits(qfull, qoff, qd, qpages, qs, len(qfull))
+    mhits = _plain_seq_hits(mfull, moff, md, mpages, ms_, len(mfull))
+    if not (len(qhits) >= 10 and len(mhits) == len(qhits)):
+        qd.close(); md.close(); return []
+    opt_re = re.compile(r'(?m)^\s*Option ([A-Z])')
+    def opt_of(text, pos):
+        best = None
+        for m in opt_re.finditer(text[:pos]):
+            best = m.group(1)
+        return best or '?'
+    slug = slug_for(dirname, filename)
+    tz = re.search(r'TZ\d+', filename); tzlab = (' ' + tz.group(0)) if tz else ''
+    records = []
+    for i, h in enumerate(qhits):
+        qend = qhits[i + 1]['pos'] if i + 1 < len(qhits) else len(qfull)
+        ast = mhits[i]['pos']; aend = mhits[i + 1]['pos'] if i + 1 < len(mhits) else len(mfull)
+        opt = opt_of(qfull, h['pos'])
+        qt = clean(qfull[h['pos']:qend]); at = clean(mfull[ast:aend])
+        mk = sum(int(x) for x in MARKS.findall(qt)) or None
+        folder = f"physics_hl_p3/{slug}/OPT_{opt}"
+        qimgs = render_span(qd, qpages, qoff, h, qend, folder, 'q', i + 1)
+        aimgs = render_span(md, mpages, moff, mhits[i], aend, folder, 'a', i + 1)
+        records.append({
+            'id': f"PHYS_HL_P3_{slug}_OPT_{opt}_q{i + 1:02d}",
+            'subject': 'Physics', 'level': 'HL', 'topic': 'Physics HL', 'subtopic': None,
+            'paper_type': 'Paper 3', 'command_term': None, 'marks': mk, 'difficulty': None,
+            'question': qt, 'figure': None, 'answer': at, 'explanation': None,
+            'source': f"Physics HL P3 · {session_label(dirname)}{tzlab} · Option {opt}",
+            'tags': [], 'authored_by': 'ib', 'knowledge_point_ids': [], 'answer_figure': None,
+            'question_image': ','.join(qimgs), 'answer_image': ','.join(aimgs),
+            'figure_image': None, 'book_id': None, 'source_type': 'paper',
+            'category': 'past', 'review_status': 'new',
+        })
+    qd.close(); md.close(); return records
+
 def main():
     all_records = []
     skipped = []
     for sess in sorted(os.listdir(BASE)):
         if not os.path.isdir(os.path.join(BASE, sess)): continue
         if not re.match(r'^20\d\d (May|November)', sess): continue
+        if TARGET and sess not in TARGET: continue
         y = int(sess[:4])
         if y < 2000 or y > 2015: continue
         for paper in ('1', '2', '3'):
             for fn in find_qps(sess, paper):
                 try:
                     if paper == '1': recs = p1_records(sess, fn)
-                    elif paper == '2': recs = p2_records(sess, fn)
-                    else: recs = p3_records(sess, fn)
+                    elif paper == '2': recs = p2_records(sess, fn) or p2_plain_records(sess, fn)
+                    else: recs = p3_records(sess, fn) or p3_plain_records(sess, fn)
                 except Exception as e:
                     skipped.append(f"{sess}/{fn}: ERROR {e}")
                     recs = []
