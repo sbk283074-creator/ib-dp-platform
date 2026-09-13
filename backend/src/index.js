@@ -1,3 +1,5 @@
+// Load .env BEFORE anything else: src/ai.js reads process.env at import time.
+import './env.js';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
