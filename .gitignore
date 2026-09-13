@@ -25,6 +25,14 @@ backend/**/__pycache__/
 # Generated local OCR / import artifacts
 backend/ocr/*.jsonl
 backend/ocr/*.json
+backend/ocr/book_json2/
+backend/ocr/specimen_json/
+
+# Local scratch: throwaway debug scripts, logs and pre-fix backups.
+# Never commit these -- _backup_preidfix/ alone is ~560 MB of superseded crops.
+backend/ocr/_*/
+backend/ocr/_*.py
+backend/ocr/_*.sh
 
 # Large local figure corpus; production figures belong in Netlify Blob storage
 backend/public/figures/
