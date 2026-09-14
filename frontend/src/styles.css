@@ -111,6 +111,12 @@ button { cursor: pointer; font-size: 14px; border-radius: 8px; padding: 8px 14px
 
 .empty { background: var(--surface); border: 1px dashed var(--border); border-radius: 12px; padding: 32px; text-align: center; }
 .empty p { margin: 4px 0; }
+/* Failure state for a page whose data did not load. Deliberately looks nothing
+   like .empty: "the request failed" and "there is nothing here" must not be
+   mistakable for one another. */
+.load-error { background: #fdecec; border: 1px solid #f0c2bd; border-radius: 12px; padding: 24px; text-align: center; color: #b42318; }
+.load-error p { margin: 4px 0; }
+.load-error code { font-size: 12px; background: rgba(0, 0, 0, 0.05); padding: 2px 6px; border-radius: 4px; }
 .muted { color: var(--muted); font-size: 13px; }
 
 .practice-setup { max-width: 360px; display: flex; flex-direction: column; gap: 12px; }

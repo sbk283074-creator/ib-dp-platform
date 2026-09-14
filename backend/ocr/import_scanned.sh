@@ -2,7 +2,10 @@
 # Merge a scanned book's chunk files and import into the running backend.
 # Usage: import_scanned.sh BOOKID [API_BASE]
 set -u
-BOOK="$1"; API="${2:-http://localhost:3011}"
+# Default port must match frontend/vite.config.ts (server.proxy) and
+# backend/src/index.js (process.env.PORT || 3001). It used to be 3011, which
+# nothing else used -- see start.command.
+BOOK="$1"; API="${2:-http://localhost:3001}"
 HERE="$(cd "$(dirname "$0")"; pwd)"
 cd "$HERE"
 PY="/Users/lucas.ma/.workbuddy/binaries/python/envs/default/bin/python"

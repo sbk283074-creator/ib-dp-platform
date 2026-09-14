@@ -13,14 +13,33 @@ export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [filter, setFilter] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
+    let cancelled = false;
     setLoading(true);
     getBooks(filter || undefined)
-      .then(setBooks)
-      .catch(() => setBooks([]))
-      .finally(() => setLoading(false));
-  }, [filter]);
+      .then((list) => {
+        if (cancelled) return;
+        setBooks(list);
+        setError(null);
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        // Deliberately NOT `.catch(() => setBooks([]))`. An unreachable backend
+        // and an empty library are different facts; collapsing them into the
+        // empty state is what made a dead API look like "No books yet."
+        setBooks([]);
+        setError(e?.message || String(e));
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [filter, reloadKey]);
 
   const subjects = Array.from(new Set(books.map((b) => b.subject))).sort();
   const grouped: Record<string, Book[]> = {};
@@ -45,7 +64,21 @@ export default function BooksPage() {
       </div>
 
       {loading && <div className="empty">Loading…</div>}
-      {!loading && books.length === 0 && <div className="empty">No books yet.</div>}
+
+      {!loading && error && (
+        <div className="load-error">
+          <p><b>Could not load books.</b></p>
+          <p>The request to the API failed, so this list is empty <i>for that reason</i> — not because there are no books.</p>
+          <p><code>{error}</code></p>
+          <p className="muted">
+            Most likely the backend is not running. Start it on port 3001 — the frontend proxies
+            /api and /figures there (see start.command).
+          </p>
+          <p><button className="book-action" onClick={() => setReloadKey((k) => k + 1)}>Retry</button></p>
+        </div>
+      )}
+
+      {!loading && !error && books.length === 0 && <div className="empty">No books yet.</div>}
 
       {!loading && subjects.map((s) => (
         <section key={s} className="book-group">

@@ -41,3 +41,8 @@ backend/public/figures_orphaned/
 # OS/editor files
 .DS_Store
 
+# Vite writes a timestamped copy of vite.config.ts while it starts and normally
+# deletes it on exit -- but it is left behind if the dev server is killed
+# mid-start, and then shows up as an untracked file.
+*.timestamp-*.mjs
+

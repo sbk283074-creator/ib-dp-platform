@@ -418,6 +418,23 @@ const db = {
     } else {
       await fn();
     }
+  },
+
+  /**
+   * Release the local connection. In Turso mode this is a no-op (the HTTP client
+   * is stateless).
+   *
+   * This method is not optional: scripts call `db.close()` as their last line,
+   * and without it that call threw `TypeError: db.close is not a function`
+   * *after* the work had already been done, making a successful import look
+   * like a failure.
+   */
+  close() {
+    if (mode === 'local' && sqlite) {
+      sqlite.close();
+      sqlite = null;
+    }
+    initialized = null;
   }
 };
 

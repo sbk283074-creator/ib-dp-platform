@@ -110,6 +110,24 @@ export function createClient({ url, authToken }) {
         .map((s) => ({ sql: s, args: [] }));
       if (statements.length === 0) return;
       await pipeline(statements);
+    },
+
+    // Batched PARAMETERIZED statements in one HTTP round trip. `executeMultiple`
+    // cannot carry args, and calling execute() per row costs one round trip per
+    // row — for a 7,304-row book import that is the difference between ~15
+    // requests and ~7,300. The /v2/pipeline endpoint already accepts many
+    // `execute` requests, so this just exposes what pipeline() can do.
+    async batch(statements) {
+      if (!statements || statements.length === 0) return [];
+      const results = await pipeline(
+        statements.map((s) => ({
+          sql: typeof s === 'string' ? s : s.sql,
+          args: typeof s === 'string' ? [] : s.args || []
+        }))
+      );
+      return results
+        .filter((r) => r && r.type === 'ok' && r.response && r.response.type === 'execute')
+        .map((r) => mapResult(r.response.result));
     }
   };
 }

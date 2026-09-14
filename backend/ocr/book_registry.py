@@ -16,6 +16,18 @@ def _c(**kw):
     kw.setdefault("first_max", 3)
     kw.setdefault("min_sec_qs", 3)
     kw["path"] = os.path.join(ROOT, kw["rel"])
+    # Companion answer / worked-solutions PDF.
+    #
+    # This field existed in the previous generation of the registry
+    # (extract_books.py) but was dropped when the v3 pipeline was written, so
+    # every book in the DB ended up with has_answers=0 and answer='__AI_FILL__'
+    # even though 9 of the 19 books have an answers PDF sitting on disk. Give it
+    # back to `_c` so the wiring lives with the book config instead of being
+    # re-derived by hand each time.
+    kw.setdefault("answer_rel", None)
+    kw["answer_path"] = os.path.join(ROOT, kw["answer_rel"]) if kw["answer_rel"] else None
+    kw.setdefault("has_answers", bool(kw["answer_path"]))
+    kw.setdefault("answer_source", None)
     return kw
 
 
@@ -25,12 +37,16 @@ BOOKS = [
        subject="Mathematics", level="HL", title="Mathematics: Core Topics HL 1 (Haese)",
        publisher="Haese & Harris", edition="2019", tag="haese-core1", start_page=14,
        practice=r"exercise\d|reviewset\d",
-       stop=r"example|investigation|activity|selftutor|discussion|summary|\(chapter|contents"),
+       stop=r"example|investigation|activity|selftutor|discussion|summary|\(chapter|contents",
+       answer_rel="HAESE AND HARRIS 最新教材/Mathematics - Core Topics HL 1 - WORKED SOLUTIONS - Haese 2019.pdf",
+       answer_source="Haese WORKED SOLUTIONS 2019"),
     _c(id="MA-HAESE-AA2", rel="HAESE AND HARRIS 最新教材/Mathematics - Analysis and Approaches HL 2 - Haese 2019.pdf",
        subject="Mathematics", level="HL", title="Mathematics: Analysis and Approaches HL 2 (Haese)",
        publisher="Haese & Harris", edition="2019", tag="haese-aa2", start_page=14,
        practice=r"exercise\d|reviewset\d",
-       stop=r"example|investigation|activity|selftutor|discussion|summary|\(chapter|contents"),
+       stop=r"example|investigation|activity|selftutor|discussion|summary|\(chapter|contents",
+       answer_rel="HAESE AND HARRIS 最新教材/Mathematics - Analysis and Approaches HL 2 - WORKED SOLUTIONS - Haese 2020.pdf",
+       answer_source="Haese WORKED SOLUTIONS 2020"),
     _c(id="MA-OXFORD-2019", rel="HL OXFPRD 教材/Mathematics HL - Analysis and Approaches - OXFORD 2019.pdf",
        subject="Mathematics", level="HL", title="Mathematics: Analysis and Approaches HL (Oxford)",
        publisher="Oxford University Press", edition="2019", tag="oxford-aa", start_page=22,
@@ -45,23 +61,31 @@ BOOKS = [
        subject="Mathematics", level="HL", title="Mathematics for the IB Diploma HL (Cambridge)",
        publisher="Cambridge University Press", edition="2012", tag="cambridge-hl", start_page=18,
        practice=r"xerc",
-       stop=r"workedexample|example\d|activity|investigation|summary|contents"),
+       stop=r"workedexample|example\d|activity|investigation|summary|contents",
+       answer_rel="CAMBRIDGE/Mathematics HL - Solutions Manual - Fannon, Kadelburg, Woolley and Ward - Cambridge 2016.pdf",
+       answer_source="Cambridge Solutions Manual 2016"),
     _c(id="MA-IBID-2017", rel="IBID/Mathematics HL Core - Buckle, Cirrito, Dunbar, Henry, Hung and McAuliffe - Fifth Edition - IBID 2017.pdf",
        subject="Mathematics", level="HL", title="Mathematics HL Core (IBID, 5th ed)",
        publisher="IBID Press", edition="2017", tag="ibid-2017", start_page=16,
        practice=r"exercise\d",
-       stop=r"example\d|^chapter|activity|investigation|summary|contents"),
+       stop=r"example\d|^chapter|activity|investigation|summary|contents",
+       answer_rel="IBID/Mathematics HL Core - ANSWERS - Buckle, Cirrito, Dunbar, Henry, Hung and McAuliffe - Fifth Edition - IBID 2017.pdf",
+       answer_source="IBID ANSWERS 2017"),
     _c(id="MA-IBID-2004", rel="IBID/Mathematics Higher Level (CORE) - Fabio Cirrito - Third Edition - IBID 2004.pdf",
        subject="Mathematics", level="HL", title="Mathematics Higher Level Core (IBID, 3rd ed)",
        publisher="IBID Press", edition="2004", tag="ibid-2004", start_page=24,
        practice=r"xercises?\d?$",
-       stop=r"example\d|chapter\d|summary|contents"),
+       stop=r"example\d|chapter\d|summary|contents",
+       answer_rel="IBID/Mathematics Higher Level (CORE) - ANSWERS - Fabio Cirrito - Third Edition - IBID 2004.pdf",
+       answer_source="IBID ANSWERS 2004"),
     # ---------------- MATHEMATICS — WORKBOOKS / PRACTICE ----------------
     _c(id="MA-HODDER-WB", rel="HL Workbook/Mathematics - Analysis and Approaches HL - Exam Practice Workbook - Hodder 2021.pdf",
        subject="Mathematics", level="HL", title="AA HL Exam Practice Workbook (Hodder)",
        publisher="Hodder Education", edition="2021", tag="hodder-wb", start_page=8,
        practice=r"^\d{1,2}(numberandalgebra|functions|geometry|trigonometry|statistics|probability|calculus|syllabusrevision)",
-       stop=r"^(?!$)$", head_ratio=1.15, first_max=200, qnum_max=200),
+       stop=r"^(?!$)$", head_ratio=1.15, first_max=200, qnum_max=200,
+       answer_rel="HL Workbook/Mathematics - Analysis and Approaches HL - Exam Practice Workbook - ANSWERS - Hodder 2021.pdf",
+       answer_source="Hodder ANSWERS 2021"),
     _c(id="MA-HAESE-REV", rel="HAESE Workbook/Mathematics - Analysis and Approaches HL 2 - REVISION GUIDE - Haese 2020.pdf",
        subject="Mathematics", level="HL", title="AA HL 2 Revision Guide (Haese)",
        publisher="Haese & Harris", edition="2020", tag="haese-rev", start_page=16,
@@ -83,17 +107,23 @@ BOOKS = [
        publisher="Oxford University Press", edition="2023", tag="oxford-phys", start_page=18,
        head_ratio=0.99,
        practice=r"practicequestions|data-basedquestions|dataquestions",
-       stop=r"workedexample|example\d|activity|investigation"),
+       stop=r"workedexample|example\d|activity|investigation",
+       answer_rel="Physics-HLSL-Oxford Textbook(First exam 2025)/Physics - ANSWERS - Homer, Piętka and Heathcote - Fifth Edition - Oxford 2023 [semi-official].pdf",
+       answer_source="Oxford ANSWERS 2023 [semi-official]"),
     _c(id="PH-CAMBRIDGE-WB", rel="Physics-HLSL-Cambridge-Workbook(First exam 2025)/CAMBRIDGE Physics for the IB Diploma WORKBOOK - Seventh Edition - Cambridge 2023 (Digital Edition).pdf",
        subject="Physics", level="HL", title="Physics for the IB Diploma Workbook (Cambridge)",
        publisher="Cambridge University Press", edition="2023", tag="cambridge-phys-wb", start_page=14,
        practice=r"xerc",
-       stop=r"chapteroutline|summary|tip"),
+       stop=r"chapteroutline|summary|tip",
+       answer_rel="Physics-HLSL-Cambridge-Textbook Answers(First exam 2025)/Coursebook answers.pdf",
+       answer_source="Cambridge Coursebook answers"),
     _c(id="PH-TSOKOS-WB", rel="Physics-HLSL-Cambridge-Workbook(First exam 2025)/Physics - WORKBOOK - K.A. Tsokos - Seventh Edition - Cambridge 2023（扫描版）.pdf",
        subject="Physics", level="HL", title="Physics Workbook (Tsokos, 7th ed)",
        publisher="Cambridge University Press", edition="2023", tag="tsokos-wb", start_page=14,
        practice=r"exam-stylequestions|multiplechoicequestions",
-       stop=r"^(?!$)$", head_ratio=1.05),
+       stop=r"^(?!$)$", head_ratio=1.05,
+       answer_rel="Tsokos 7th edition Workbook ANSWERS.pdf",
+       answer_source="Tsokos Workbook ANSWERS"),
     # ---------------- COMPUTER SCIENCE ----------------
     _c(id="CS-OXFORD-2025", rel="Computer Science - MacKenty and Stephenson - Oxford 2025.pdf",
        subject="Computer Science", level="HL", title="Computer Science for the IB Diploma (Oxford)",
