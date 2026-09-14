@@ -23,7 +23,6 @@ export default function SearchPage() {
   const [marks, setMarks] = useState<number | ''>('');
   const [knowledge_point, setKnowledgePoint] = useState('');
   const [category, setCategory] = useState<Category>('all');
-  const [newComing, setNewComing] = useState(false);
   const [hideCompleted, setHideCompleted] = useState(true);
 
   const [page, setPage] = useState(0);
@@ -60,7 +59,6 @@ export default function SearchPage() {
       category, limit: PAGE_SIZE, offset: p * PAGE_SIZE,
       exclude_completed: hideCompleted
     };
-    if (newComing) params.review_status = 'new';
     return params;
   }
 
@@ -104,17 +102,8 @@ export default function SearchPage() {
 
   function reset() {
     setQ(''); setSubject(''); setTopic(''); setPaperType(''); setCommandTerm('');
-    setDifficulty(''); setMarks(''); setKnowledgePoint(''); setCategory('all'); setNewComing(false);
+    setDifficulty(''); setMarks(''); setKnowledgePoint(''); setCategory('all');
     load(0);
-  }
-
-  // When a review action removes an item from the "new coming" view, drop it
-  // from the current page and decrement the running total.
-  function onReview(_id: string, status: 'new' | 'done') {
-    if (newComing && status === 'done') {
-      setItems((prev) => prev.filter((x) => x.id !== _id));
-      setTotal((t) => Math.max(0, t - 1));
-    }
   }
 
   function gotoPage(p: number) {
@@ -140,10 +129,6 @@ export default function SearchPage() {
             <button className={'seg-btn' + (category === 'questionbank' ? ' on' : '')} onClick={() => { setCategory('questionbank'); runSearch(); }}>Question bank</button>
           </div>
         </div>
-        <label className="checkline">
-          <input type="checkbox" checked={newComing} onChange={(e) => { setNewComing(e.target.checked); runSearch(); }} />
-          New coming (unreviewed)
-        </label>
         <label>Subject
           <select value={subject} onChange={(e) => setSubject(e.target.value)}>
             <option value="">All</option>
@@ -201,7 +186,7 @@ export default function SearchPage() {
             <p className="muted">Nothing matches the current filters.</p>
           </div>
         ) : (
-          items.map((qq) => <QuestionCard key={qq.id} q={qq} onReview={onReview} />)
+          items.map((qq) => <QuestionCard key={qq.id} q={qq} />)
         )}
 
         {total > PAGE_SIZE && (

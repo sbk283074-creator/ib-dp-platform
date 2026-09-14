@@ -131,7 +131,7 @@ router.get('/facets', asyncHandler(async (req, res) => {
 router.get('/questions', asyncHandler(async (req, res) => {
   const {
     q, subject, topic, paper_type, command_term, difficulty, marks, tag, knowledge_point,
-    category, review_status, sort = 'recent', limit = 20, offset = 0, exclude_completed
+    category, sort = 'recent', limit = 20, offset = 0, exclude_completed
   } = req.query;
 
   const filters = [];
@@ -157,10 +157,6 @@ router.get('/questions', asyncHandler(async (req, res) => {
   if (category) {
     filters.push('category = ?');
     params.push(category);
-  }
-  if (review_status) {
-    filters.push('review_status = ?');
-    params.push(review_status);
   }
   if (difficulty) { filters.push('difficulty = ?'); params.push(Number(difficulty)); }
   if (marks) { filters.push('marks = ?'); params.push(Number(marks)); }
@@ -983,19 +979,6 @@ router.patch('/reports/:id', asyncHandler(async (req, res) => {
   params.push(id);
   await db.prepare(`UPDATE reports SET ${sets.join(', ')} WHERE id = ?`).run(...params);
   res.json({ ok: true });
-}));
-
-// Review workflow: mark a freshly-imported question as reviewed ('done') or reset.
-router.post('/questions/:id/review-status', asyncHandler(async (req, res) => {
-  const id = req.params.id;
-  const { status } = req.body || {};
-  if (!['new', 'done'].includes(status)) {
-    return res.status(400).json({ error: 'status must be "new" or "done"' });
-  }
-  const q = await db.prepare('SELECT id FROM questions WHERE id = ?').get(id);
-  if (!q) return res.status(404).json({ error: 'question not found' });
-  await db.prepare('UPDATE questions SET review_status = ? WHERE id = ?').run(status, id);
-  res.json({ ok: true, review_status: status });
 }));
 
 // Router-level error handler (catches async rejections forwarded by asyncHandler).

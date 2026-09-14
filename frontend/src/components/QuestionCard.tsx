@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Question } from '../types';
 import { useAppState } from '../state';
-import { getQuestionNote, saveQuestionNote, patchProgress, getSimilar, createReport, setReviewStatus } from '../api';
+import { getQuestionNote, saveQuestionNote, patchProgress, getSimilar, createReport } from '../api';
 import { REPORT_REASONS } from '../types';
 import RichText from './RichText';
 import Lightbox from './Lightbox';
@@ -57,7 +57,7 @@ function ImageStack({ imgs, label, onZoom }: { imgs: string[]; label: string; on
   );
 }
 
-export default function QuestionCard({ q, source, onReview }: { q: Question; source?: 'paper' | 'book'; onReview?: (id: string, status: 'new' | 'done') => void }) {
+export default function QuestionCard({ q, source }: { q: Question; source?: 'paper' | 'book' }) {
   const [open, setOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
   const [note, setNote] = useState<string | null>(null);
@@ -81,20 +81,6 @@ export default function QuestionCard({ q, source, onReview }: { q: Question; sou
   const [reportPage, setReportPage] = useState('');
   const [reportSent, setReportSent] = useState(false);
   const [reportBusy, setReportBusy] = useState(false);
-
-  // Review workflow: track whether this question is still awaiting review.
-  const [review, setReview] = useState<string | null | undefined>(q.review_status);
-  const [reviewBusy, setReviewBusy] = useState(false);
-  async function setReviewed(status: 'new' | 'done') {
-    if (reviewBusy) return;
-    setReviewBusy(true);
-    try {
-      await setReviewStatus(q.id, status);
-      setReview(status);
-      onReview?.(q.id, status);
-    } catch { /* ignore */ }
-    setReviewBusy(false);
-  }
 
   const { favorites, kpMap, collections, toggleFav, addToCollection, createCollection } = useAppState();
   const favorited = Boolean(favorites[q.id]);
@@ -176,7 +162,6 @@ export default function QuestionCard({ q, source, onReview }: { q: Question; sou
             return <span className="badge source-badge">{sb.label}</span>;
           })()}
           {q.topic && <Badge>{q.topic}</Badge>}
-          {review === 'new' && <span className="badge new-badge" title="Newly imported — awaiting review">New</span>}
           {q.paper_type && <Badge>{q.paper_type}</Badge>}
           {q.command_term && <Badge>{q.command_term}</Badge>}
           {q.marks != null && <Badge>[{q.marks} marks]</Badge>}
@@ -216,18 +201,6 @@ export default function QuestionCard({ q, source, onReview }: { q: Question; sou
             )}
           </div>
           <button className="iconbtn" title="Report this question" onClick={() => setReportOpen(true)}>⚑</button>
-          {review === 'new' && (
-            <button className="iconbtn review-new" title="Newly imported — click to mark as reviewed"
-              onClick={() => setReviewed('done')} disabled={reviewBusy} style={{ marginLeft: 6 }}>
-              ✓ Mark reviewed
-            </button>
-          )}
-          {review === 'done' && (
-            <button className="iconbtn review-done" title="Reviewed — click to reopen for another pass"
-              onClick={() => setReviewed('new')} disabled={reviewBusy}>
-              ↺ Reopen
-            </button>
-          )}
         </div>
       </div>
 

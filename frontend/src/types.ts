@@ -36,8 +36,6 @@ export interface Question {
   source_type?: 'paper' | 'book' | null;
   // Category: book / past / topic / ai (ai is hidden from the UI filter).
   category?: string | null;
-  // Review workflow: null = legacy, 'new' = awaiting review, 'done' = reviewed.
-  review_status?: string | null;
 }
 
 // F10: a usage record — a trace left when a question was used in a paper or added to the wrong book.

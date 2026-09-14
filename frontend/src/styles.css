@@ -136,11 +136,6 @@ button { cursor: pointer; font-size: 14px; border-radius: 8px; padding: 8px 14px
 .source-badge { background: #e6f0fb; color: #185fa5; border-color: #b9d6f2; }
 .done-badge { background: #e6f7ec; color: #1a7f37; border-color: #aee3c0; }
 .book-badge { background: #fff7e6; color: #b2560d; border-color: #f3c98a; font-weight: 600; }
-.new-badge { background: #fff0f6; color: #c2185b; border-color: #f3a9cd; font-weight: 600; }
-.iconbtn.review-new { color: #1a7f37; border-color: #aee3c0; background: #effaf2; font-size: 12px; width: auto; padding: 0 8px; }
-.iconbtn.review-new:hover { background: #d8f3e0; }
-.iconbtn.review-done { color: #6b7280; border-color: #d8dde3; background: #f3f4f6; font-size: 12px; width: auto; padding: 0 8px; }
-.iconbtn.review-done:hover { background: #e9ebef; }
 
 /* Pagination */
 .pager { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 16px 4px 28px; border-top: 1px solid var(--border); margin-top: 16px; }

@@ -24,7 +24,6 @@ export interface QuestionQuery {
   tag?: string;
   knowledge_point?: string;
   category?: 'all' | 'book' | 'past' | 'topic' | 'ai' | 'questionbank' | 'mock';
-  review_status?: 'new' | 'done' | null;
   sort?: string;
   limit?: number;
   offset?: number;
@@ -421,15 +420,5 @@ export function askAI(body: {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
-  });
-}
-
-// Review workflow: mark a freshly-imported question as reviewed ('done') or
-// reset it back to 'new' (reopen for another pass).
-export function setReviewStatus(id: string, status: 'new' | 'done'): Promise<{ ok: boolean; review_status: string }> {
-  return getJSON(`/api/questions/${encodeURIComponent(id)}/review-status`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status })
   });
 }
