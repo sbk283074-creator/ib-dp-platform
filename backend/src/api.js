@@ -131,7 +131,7 @@ router.get('/facets', asyncHandler(async (req, res) => {
 router.get('/questions', asyncHandler(async (req, res) => {
   const {
     q, subject, topic, paper_type, command_term, difficulty, marks, tag, knowledge_point,
-    category, sort = 'recent', limit = 20, offset = 0, exclude_completed
+    category, exclude_category, sort = 'recent', limit = 20, offset = 0, exclude_completed
   } = req.query;
 
   const filters = [];
@@ -157,6 +157,17 @@ router.get('/questions', asyncHandler(async (req, res) => {
   if (category) {
     filters.push('category = ?');
     params.push(category);
+  }
+  // Hide whole categories from a listing WITHOUT deleting the rows. The frontend
+  // uses this to keep book-imported questions (category='book') out of "All" while
+  // the data stays in the DB. Comma-separated. NULL category is never excluded, so
+  // un-categorised rows are not silently dropped.
+  if (exclude_category) {
+    const ex = String(exclude_category).split(',').map((s) => s.trim()).filter(Boolean);
+    if (ex.length) {
+      filters.push(`(category IS NULL OR category NOT IN (${ex.map(() => '?').join(',')}))`);
+      ex.forEach((c) => params.push(c));
+    }
   }
   if (difficulty) { filters.push('difficulty = ?'); params.push(Number(difficulty)); }
   if (marks) { filters.push('marks = ?'); params.push(Number(marks)); }
