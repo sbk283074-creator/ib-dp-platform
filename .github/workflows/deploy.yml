@@ -1,7 +1,7 @@
 # Deploy the static frontend to GitHub Pages.
-# The frontend is static only; it talks to the LIVE Netlify backend
-# (https://ib-dp-platform.netlify.app) for /api and /figures, configured at
-# build time via VITE_API_BASE_URL / VITE_FIGURES_BASE_URL below.
+# The frontend is static only; it talks to the LIVE backends configured at build
+# time via VITE_API_BASE_URL / VITE_FIGURES_BASE_URL below. The two MUST differ:
+# the API lives on Cloudflare, the figures only exist on Netlify.
 name: Deploy to GitHub Pages
 
 on:
@@ -32,7 +32,12 @@ jobs:
         working-directory: frontend
         run: npm install && npm run build
         env:
-          VITE_API_BASE_URL: https://ib-dp-platform.netlify.app
+          # API -> Cloudflare: the CURRENT backend. Netlify's copy is 17 days stale
+          # and has no /api/ask, so pointing this at Netlify makes the per-question
+          # "Ask AI" 404 (the old AskAI.tsx then unmounted itself entirely).
+          VITE_API_BASE_URL: https://ib-dp-platform-api.pages.dev
+          # Figures -> Netlify: the only host with a /figures route. Cloudflare has
+          # no such route at all, so this cannot follow the API host.
           VITE_FIGURES_BASE_URL: https://ib-dp-platform.netlify.app
 
       - name: SPA fallback (404.html -> index.html)

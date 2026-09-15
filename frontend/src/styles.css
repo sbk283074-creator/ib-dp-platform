@@ -46,7 +46,9 @@ body {
 
 .content { padding: 24px; max-width: 1100px; margin: 0 auto; }
 
-.search-layout, .export-layout { display: grid; grid-template-columns: 260px 1fr; gap: 24px; align-items: start; }
+/* minmax(0,1fr) — a bare 1fr track has min-width:auto, so a wide child can
+   push the track past its share and shove the sidebar out of alignment. */
+.search-layout, .export-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 24px; align-items: start; }
 .filters {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -62,10 +64,15 @@ body {
 .filters label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
 .filter-group { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
 .filter-label { font-size: 12px; color: var(--muted); }
-.seg { display: flex; gap: 4px; }
+/* The Category row carries six labels. Inside a 260px sidebar they cannot all
+   share one line, and flex items default to min-width:auto — so without
+   wrapping the row simply overflows to the right and the labels paint on top
+   of the question cards. Wrapping keeps every label inside the sidebar. */
+.seg { display: flex; gap: 4px; flex-wrap: wrap; }
 .seg-btn {
-  flex: 1; padding: 7px 4px; font-size: 12px; border: 1px solid var(--border);
+  flex: 1 1 auto; padding: 7px 6px; font-size: 12px; border: 1px solid var(--border);
   background: #fff; color: var(--muted); border-radius: 8px; cursor: pointer;
+  white-space: nowrap;
 }
 .seg-btn:hover { background: var(--bg); }
 .seg-btn.on { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
@@ -330,6 +337,22 @@ button.danger:hover { background: #fdecec; }
 .note-box { margin-top: 10px; }
 .note-saved { font-size: 11px; color: #1a7f37; margin-top: 4px; }
 .danger-text { color: #b42318; }
+
+/* ---- per-question "Ask AI" ------------------------------------------------
+   The button opens the SAME chat panel as the floating site-wide assistant
+   (assets/ai-widget.js), just focused on this one question. It must therefore
+   NOT use .iconbtn — that is a 30x30 square sized for a single glyph, and the
+   two-word label spills straight out of it. */
+.card-ai { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.askai { display: inline-flex; align-items: center; gap: 8px; }
+.askai-btn {
+  width: auto; height: auto; padding: 8px 14px; font-size: 13px; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  background: #fff; border: 1px solid var(--border); border-radius: 8px;
+  color: var(--primary-700); cursor: pointer;
+}
+.askai-btn:hover { background: var(--bg); border-color: var(--primary); color: var(--primary); }
+.askai-note { font-size: 12px; color: var(--muted); }
 
 /* ---- knowledge page (F2/F3) ---- */
 .backlink { display: inline-block; font-size: 13px; color: var(--primary); text-decoration: none; margin-bottom: 10px; }

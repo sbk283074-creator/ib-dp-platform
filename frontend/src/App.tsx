@@ -40,7 +40,7 @@ function Shell() {
   const isHome = location.pathname === '/';
 
   useEffect(() => {
-    getWrongQuestions(false).then((list) => setWrongCount(list.length)).catch(() => {});
+    getWrongQuestions({ includeMastered: false }).then((list) => setWrongCount(list.length)).catch(() => {});
     getExams().then((list) => setExamCount(list.length)).catch(() => {});
     getReports({ status: 'open' }).then((r) => setReportCount(r.total)).catch(() => {});
   }, []);

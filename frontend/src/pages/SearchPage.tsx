@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getFacets, getQuestions } from '../api';
+import type { QuestionQuery } from '../api';
 import { useAppState } from '../state';
-import type { Facets, Question, QuestionQuery } from '../types';
+import type { Facets, Question } from '../types';
 import QuestionCard from '../components/QuestionCard';
 
 type Category = 'all' | 'book' | 'past' | 'topic' | 'questionbank' | 'mock';
@@ -51,20 +52,23 @@ export default function SearchPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Build the query for a given page. `resetToFirst` collapses back to page 0
-  // whenever a filter changes (so the user always starts at the top).
-  function buildParams(p: number): QuestionQuery {
+  // Build the query for a given page. `over` lets a click handler pass the value
+  // it is ABOUT to set: setState is async, so a handler that calls
+  // setCategory('past') and then reads `category` still sees the old value, and
+  // the filter would only take effect on the *second* click.
+  function buildParams(p: number, over?: Partial<QuestionQuery>): QuestionQuery {
     const params: QuestionQuery = {
       q, subject, topic, paper_type, command_term, difficulty, marks, knowledge_point,
       category, limit: PAGE_SIZE, offset: p * PAGE_SIZE,
-      exclude_completed: hideCompleted
+      exclude_completed: hideCompleted,
+      ...over
     };
     return params;
   }
 
-  function load(p: number) {
+  function load(p: number, over?: Partial<QuestionQuery>) {
     setLoading(true);
-    getQuestions(buildParams(p))
+    getQuestions(buildParams(p, over))
       .then((r) => { setItems(r.items); setTotal(r.total); setPage(p); })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -72,6 +76,10 @@ export default function SearchPage() {
 
   // Filter changes: restart from page 1.
   function runSearch() { load(0); }
+
+  // Selecting a category must send the category being selected, not the one
+  // still sitting in state.
+  function pickCategory(c: Category) { setCategory(c); load(0, { category: c }); }
 
   // Initial load with retry: if the API is briefly unreachable, keep trying
   // (every 3s, up to ~60s) instead of leaving a permanent "No questions yet".
@@ -103,7 +111,12 @@ export default function SearchPage() {
   function reset() {
     setQ(''); setSubject(''); setTopic(''); setPaperType(''); setCommandTerm('');
     setDifficulty(''); setMarks(''); setKnowledgePoint(''); setCategory('all');
-    load(0);
+    // Same async-state trap as pickCategory: send the cleared values explicitly
+    // instead of relying on the state that has not been applied yet.
+    load(0, {
+      q: '', subject: '', topic: '', paper_type: '', command_term: '',
+      difficulty: '', marks: '', knowledge_point: '', category: 'all'
+    });
   }
 
   function gotoPage(p: number) {
@@ -121,12 +134,12 @@ export default function SearchPage() {
         <div className="filter-group">
           <span className="filter-label">Category</span>
           <div className="seg">
-            <button className={'seg-btn' + (category === 'all' ? ' on' : '')} onClick={() => { setCategory('all'); runSearch(); }}>All</button>
-            <button className={'seg-btn' + (category === 'book' ? ' on' : '')} onClick={() => { setCategory('book'); runSearch(); }}>Books</button>
-            <button className={'seg-btn' + (category === 'past' ? ' on' : '')} onClick={() => { setCategory('past'); runSearch(); }}>Past papers</button>
-            <button className={'seg-btn' + (category === 'mock' ? ' on' : '')} onClick={() => { setCategory('mock'); runSearch(); }}>Mock papers</button>
-            <button className={'seg-btn' + (category === 'topic' ? ' on' : '')} onClick={() => { setCategory('topic'); runSearch(); }}>Topic questions</button>
-            <button className={'seg-btn' + (category === 'questionbank' ? ' on' : '')} onClick={() => { setCategory('questionbank'); runSearch(); }}>Question bank</button>
+            <button className={'seg-btn' + (category === 'all' ? ' on' : '')} onClick={() => pickCategory('all')}>All</button>
+            <button className={'seg-btn' + (category === 'book' ? ' on' : '')} onClick={() => pickCategory('book')}>Books</button>
+            <button className={'seg-btn' + (category === 'past' ? ' on' : '')} onClick={() => pickCategory('past')}>Past papers</button>
+            <button className={'seg-btn' + (category === 'mock' ? ' on' : '')} onClick={() => pickCategory('mock')}>Mock papers</button>
+            <button className={'seg-btn' + (category === 'topic' ? ' on' : '')} onClick={() => pickCategory('topic')}>Topic questions</button>
+            <button className={'seg-btn' + (category === 'questionbank' ? ' on' : '')} onClick={() => pickCategory('questionbank')}>Question bank</button>
           </div>
         </div>
         <label>Subject
@@ -171,7 +184,7 @@ export default function SearchPage() {
         <button className="primary" onClick={runSearch}>Search</button>
         <button className="secondary" onClick={reset}>Reset</button>
         <label className="checkline">
-          <input type="checkbox" checked={hideCompleted} onChange={(e) => { setHideCompleted(e.target.checked); runSearch(); }} />
+          <input type="checkbox" checked={hideCompleted} onChange={(e) => { const v = e.target.checked; setHideCompleted(v); load(0, { exclude_completed: v }); }} />
           Hide completed questions
         </label>
       </aside>

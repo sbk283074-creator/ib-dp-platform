@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { getCollection, getQuestions, recordAttempt } from '../api';
+import type { QuestionQuery } from '../api';
 import { useAppState } from '../state';
-import type { Question, QuestionQuery } from '../types';
+import type { Question } from '../types';
 import RichText from '../components/RichText';
 
 export default function PracticePage() {

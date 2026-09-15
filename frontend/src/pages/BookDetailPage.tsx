@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getBook, Book, Question } from '../api';
+import { getBook, Book } from '../api';
+import type { Question } from '../types';
 import QuestionCard from '../components/QuestionCard';
 
 export default function BookDetailPage() {

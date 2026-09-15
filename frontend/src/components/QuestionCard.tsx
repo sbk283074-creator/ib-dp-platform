@@ -39,9 +39,16 @@ function splitImages(s: string | null | undefined): string[] {
   if (!s) return [];
   const FIG_HOST = (import.meta as any).env?.VITE_FIGURES_BASE_URL || '';
   return s.split(',').map((p) => p.trim()).filter(Boolean).map((p) => {
-    // stored paths are relative to the /figures static dir (e.g. "paper_aa_hl_p1/...")
-    if (/^https?:\/\//.test(p) || p.startsWith('/')) return p;
-    return FIG_HOST + '/figures/' + p.replace(/^\/?figures\//, '');
+    // Already absolute (e.g. a Blob/R2 URL) — leave it alone.
+    if (/^https?:\/\//i.test(p)) return p;
+    // Stored paths come in two shapes and BOTH must land on the figure host:
+    //   "cs_hl_p2/2015Nov/q01_p2.jpg"              (relative)
+    //   "/figures/book2/PH-TSOKOS-WB/…_q0026.jpg"  (root-relative)
+    // The second shape used to be returned untouched, so the browser asked
+    // github.io for /figures/... and painted a broken-image icon. Normalise
+    // both to the same relative key before prefixing the host.
+    const rel = p.replace(/^\/+/, '').replace(/^figures\//i, '');
+    return FIG_HOST + '/figures/' + rel;
   });
 }
 
@@ -292,7 +299,9 @@ export default function QuestionCard({ q, source }: { q: Question; source?: 'pap
         </div>
       )}
 
-      <AskAI q={q} />
+      <div className="card-ai">
+        <AskAI q={q} />
+      </div>
 
       {zoomSrc && <Lightbox src={zoomSrc} onClose={() => setZoomSrc(null)} />}
 

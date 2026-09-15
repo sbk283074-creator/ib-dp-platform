@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { exportHtml, getFacets, getQuestions, getQuestion } from '../api';
+import type { QuestionQuery } from '../api';
 import QuestionCard from '../components/QuestionCard';
-import type { Facets, Question, QuestionQuery } from '../types';
+import type { Facets, Question } from '../types';
 
 export default function ExportPage() {
   const [facets, setFacets] = useState<Facets>({ subjects: [], topics: [], paper_types: [], command_terms: [] });
