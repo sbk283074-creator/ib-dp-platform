@@ -5,7 +5,15 @@ import { useAppState } from '../state';
 import type { Facets, Question } from '../types';
 import QuestionCard from '../components/QuestionCard';
 
-type Category = 'all' | 'book' | 'past' | 'topic' | 'questionbank' | 'mock';
+// Book-imported questions (category='book') are hidden from the UI: their rows
+// carry placeholder text ("[See question image. Source: …]") and no usable
+// answer, so they are not listed anywhere. The rows stay in the DB — this is a
+// UI-only exclusion, nothing is deleted.
+//
+// There is deliberately no "All" option any more: an absent `category` means
+// "no filter", which is exactly what would bring the books back. Every option
+// below is a real, non-book category, so the exclusion holds by construction.
+type Category = 'past' | 'topic' | 'questionbank' | 'mock';
 const PAGE_SIZE = 50;
 
 export default function SearchPage() {
@@ -23,7 +31,7 @@ export default function SearchPage() {
   const [difficulty, setDifficulty] = useState<number | ''>('');
   const [marks, setMarks] = useState<number | ''>('');
   const [knowledge_point, setKnowledgePoint] = useState('');
-  const [category, setCategory] = useState<Category>('all');
+  const [category, setCategory] = useState<Category>('past');
   const [hideCompleted, setHideCompleted] = useState(true);
 
   const [page, setPage] = useState(0);
@@ -43,7 +51,7 @@ export default function SearchPage() {
     setLoading(true);
     getQuestions({
       q: query, subject: '', topic: '', paper_type: '', command_term: '',
-      difficulty: '', marks: '', knowledge_point: '', category: 'all',
+      difficulty: '', marks: '', knowledge_point: '', category: 'past',
       limit: PAGE_SIZE, offset: 0, exclude_completed: hideCompleted,
     })
       .then((r) => { setItems(r.items); setTotal(r.total); setPage(0); })
@@ -110,12 +118,12 @@ export default function SearchPage() {
 
   function reset() {
     setQ(''); setSubject(''); setTopic(''); setPaperType(''); setCommandTerm('');
-    setDifficulty(''); setMarks(''); setKnowledgePoint(''); setCategory('all');
+    setDifficulty(''); setMarks(''); setKnowledgePoint(''); setCategory('past');
     // Same async-state trap as pickCategory: send the cleared values explicitly
     // instead of relying on the state that has not been applied yet.
     load(0, {
       q: '', subject: '', topic: '', paper_type: '', command_term: '',
-      difficulty: '', marks: '', knowledge_point: '', category: 'all'
+      difficulty: '', marks: '', knowledge_point: '', category: 'past'
     });
   }
 
@@ -134,8 +142,6 @@ export default function SearchPage() {
         <div className="filter-group">
           <span className="filter-label">Category</span>
           <div className="seg">
-            <button className={'seg-btn' + (category === 'all' ? ' on' : '')} onClick={() => pickCategory('all')}>All</button>
-            <button className={'seg-btn' + (category === 'book' ? ' on' : '')} onClick={() => pickCategory('book')}>Books</button>
             <button className={'seg-btn' + (category === 'past' ? ' on' : '')} onClick={() => pickCategory('past')}>Past papers</button>
             <button className={'seg-btn' + (category === 'mock' ? ' on' : '')} onClick={() => pickCategory('mock')}>Mock papers</button>
             <button className={'seg-btn' + (category === 'topic' ? ' on' : '')} onClick={() => pickCategory('topic')}>Topic questions</button>

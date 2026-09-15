@@ -23,6 +23,9 @@ export interface QuestionQuery {
   marks?: number | '';
   tag?: string;
   knowledge_point?: string;
+  // The UI no longer sends 'all' or 'book' — book-imported questions are hidden
+  // from the frontend (the rows stay in the DB). Both values remain valid on the
+  // API for direct callers, and getQuestions still skips the 'all' sentinel.
   category?: 'all' | 'book' | 'past' | 'topic' | 'ai' | 'questionbank' | 'mock';
   sort?: string;
   limit?: number;

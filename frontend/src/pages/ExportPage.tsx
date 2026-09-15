@@ -11,7 +11,9 @@ export default function ExportPage() {
   const [html, setHtml] = useState('');
   const [subject, setSubject] = useState('');
   const [topic, setTopic] = useState('');
-  const [category, setCategory] = useState<'all' | 'book' | 'past' | 'topic' | 'questionbank' | 'mock'>('all');
+  // No 'all' / 'book' option: book-imported questions are hidden from the UI, and
+  // an absent category would pull them back in.
+  const [category, setCategory] = useState<'past' | 'topic' | 'questionbank' | 'mock'>('past');
   const [detail, setDetail] = useState<Question | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
 
@@ -76,8 +78,6 @@ export default function ExportPage() {
         <div className="filter-group">
           <span className="filter-label">Category</span>
           <div className="seg">
-            <button className={'seg-btn' + (category === 'all' ? ' on' : '')} onClick={() => setCategory('all')}>All</button>
-            <button className={'seg-btn' + (category === 'book' ? ' on' : '')} onClick={() => setCategory('book')}>Books</button>
             <button className={'seg-btn' + (category === 'past' ? ' on' : '')} onClick={() => setCategory('past')}>Past papers</button>
             <button className={'seg-btn' + (category === 'mock' ? ' on' : '')} onClick={() => setCategory('mock')}>Mock papers</button>
             <button className={'seg-btn' + (category === 'topic' ? ' on' : '')} onClick={() => setCategory('topic')}>Topic questions</button>

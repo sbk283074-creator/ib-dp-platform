@@ -15,7 +15,10 @@ export default function PracticePage() {
   const [topic, setTopic] = useState('');
   const [paper_type, setPaperType] = useState('');
   const [selectedKps, setSelectedKps] = useState<string[]>([]);
-  const [category, setCategory] = useState<'all' | 'book' | 'past' | 'topic' | 'questionbank' | 'mock'>('all');
+  // No 'all' / 'book' option: an absent category means "no filter", which would
+  // pull in the book-imported questions that are hidden from the UI. Every option
+  // below is a real, non-book category.
+  const [category, setCategory] = useState<'past' | 'topic' | 'questionbank' | 'mock'>('past');
   const [limit, setLimit] = useState(10);
   const [attempted, setAttempted] = useState(false);
 
@@ -153,8 +156,6 @@ export default function PracticePage() {
       <div className="filter-group">
         <span className="filter-label">Category</span>
         <div className="seg">
-          <button className={'seg-btn' + (category === 'all' ? ' on' : '')} onClick={() => setCategory('all')}>All</button>
-          <button className={'seg-btn' + (category === 'book' ? ' on' : '')} onClick={() => setCategory('book')}>Books</button>
           <button className={'seg-btn' + (category === 'past' ? ' on' : '')} onClick={() => setCategory('past')}>Past papers</button>
           <button className={'seg-btn' + (category === 'mock' ? ' on' : '')} onClick={() => setCategory('mock')}>Mock papers</button>
           <button className={'seg-btn' + (category === 'topic' ? ' on' : '')} onClick={() => setCategory('topic')}>Topic questions</button>
@@ -178,7 +179,7 @@ export default function PracticePage() {
       </label>
       <button className="primary" onClick={start}>Start quiz</button>
       {attempted && quiz.length === 0 && (
-        <div className="empty"><p className="muted">No questions match these filters. Try a different subject / topic / paper, or choose the “All” category.</p></div>
+        <div className="empty"><p className="muted">No questions match these filters. Try a different subject / topic / paper, or another category.</p></div>
       )}
     </div>
   );
